@@ -2,6 +2,7 @@
 
 import {useEffect,useRef,useState} from "react";
 import {DeveloperPass} from "./developer-pass";
+import {profile} from "../profile";
 import type {createLanyard} from "./lanyard-scene";
 
 export function LanyardExperience(){
@@ -37,7 +38,7 @@ export function LanyardExperience(){
         <button type="button" disabled={mode!=="3d"} onClick={()=>{controls.current?.reset();setBack(false);}}>Reset</button>
         <button type="button" onClick={()=>setMode("static")}>Standard view</button>
       </div>
-      <p className="sr-only" aria-live="polite">{back?"Reverse: Sri Lanka; Higher Diploma in Computing and Software Engineering; current focus applied AI engineering.":"Front: Kevin Menuja, full-stack developer."}</p>
+      <p className="sr-only" aria-live="polite">{back?"Reverse: Sri Lanka; Higher Diploma in Computing and Software Engineering; current focus applied AI engineering.":"Front: "+profile.name+", "+profile.title+"."}</p>
     </>}
   </div>;
 }

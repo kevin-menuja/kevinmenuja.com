@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import {profile} from "../profile";
 
 type SceneControls={flip:()=>void;reset:()=>void;dispose:()=>void};
 type Options={onLost:()=>void;reduced:()=>boolean};
@@ -16,7 +17,7 @@ function cardTexture(back:boolean){
   }else{
     g.fillStyle="#000";g.fillRect(40,160,560,460);
     g.fillStyle="#f5f7fa";g.font="bold 46px Arial";g.fillText("Kevin Menuja",40,696);
-    g.fillStyle="#cfe8b0";g.font="30px Arial";g.fillText("Full-stack developer",40,746);
+    g.fillStyle="#cfe8b0";g.font="30px Arial";g.font="28px Arial";g.fillText(profile.titleLines.slice(0,2).join(" "),40,736);g.fillText(profile.titleLines[2],40,770);
     for(let i=0;i<46;i++){g.fillStyle=i%3?"#a7b0b8":"#cfe8b0";g.fillRect(43+i*12,789,2+i%4,38);}
   }
   const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;

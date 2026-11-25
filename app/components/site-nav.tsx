@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import {profile} from "../profile";
 import {useEffect, useRef, useState} from "react";
 
 const links = [
   {label:"Work", href:"/#work"},
   {label:"About", href:"/#about"},
+  {label:"Experience", href:"/#experience"},
   {label:"Expertise", href:"/#skills"},
   {label:"Lab", href:"/#lab"}
 ];
@@ -39,7 +41,7 @@ export function SiteNav(){
     <nav className="shell nav" aria-label="Main navigation">
       <Link href="/" className="brand" onClick={()=>setOpen(false)}>
         <span className="mark" aria-hidden="true">KM<span>.</span></span>
-        <span className="brand-name">Kevin Menuja<span>SOFTWARE DEVELOPER</span></span>
+        <span className="brand-name">Kevin Menuja<span className="brand-role" title={profile.title}>AI POWERED ENGINEER</span></span>
       </Link>
       <div className="navlinks">
         {links.map(l=><Link key={l.href} href={l.href}>{l.label}</Link>)}

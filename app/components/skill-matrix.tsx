@@ -6,7 +6,7 @@ const groups=[
   {id:"frontend",index:"01",name:"Frontend",status:"Hands-on experience",skills:[["TS","TypeScript"],["Re","React"],["Nx","Next.js"],["Ht","HTML"],["Cs","CSS"]],detail:"Typed interfaces, responsive applications and component-based frontend development."},
   {id:"backend",index:"02",name:"Backend",status:"Hands-on experience",skills:[["C#","C#"],[".N","ASP.NET Core"],["Nd","Node.js"],["Ph","PHP"],["AP","REST APIs"]],detail:"Service-oriented APIs, application logic and server-rendered systems."},
   {id:"data",index:"03",name:"Data & delivery",status:"Hands-on experience",skills:[["Pg","PostgreSQL"],["My","MySQL"],["Pr","Prisma"],["Ef","EF Core"],["Gt","Git"],["Dk","Docker"]],detail:"Relational persistence, ORM integration, version control and container-based workflows."},
-  {id:"ai",index:"04",name:"Applied AI",status:"Current learning focus",skills:[["Py","Python"],["Fa","FastAPI"],["LM","LLM APIs"],["Rg","RAG"],["Tc","Tool calling"],["Ev","Evaluations"],["Ag","Secure agents"]],detail:"Active learning direction. These topics are not presented as completed AI deployments."}
+  {id:"ai",index:"04",name:"Applied AI",status:"Current learning focus",skills:[["Py","Python"],["Fa","FastAPI"],["LM","LLM APIs"],["Rg","RAG"],["Tc","Tool calling"],["Ev","Evaluations"],["Ag","Secure agents"]],detail:"Building on practical AI-assisted development, prompt engineering and AI agent familiarity. These integration topics are a current specialization, not a claim of completed AI deployments."}
 ];
 
 export function SkillMatrix(){

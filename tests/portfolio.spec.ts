@@ -260,3 +260,19 @@ test("expanded accessibility scan on interactive states",async({page})=>{
   const modal=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
   expect(modal.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
 });
+
+test("professional identity is consistent and supported by public content",async({page})=>{
+  const title="AI Powered Full-Stack Software Engineer";
+  await page.setViewportSize({width:1440,height:900});
+  await page.goto("/");
+  await expect(page).toHaveTitle(new RegExp(title));
+  await expect(page.locator(".hero-role")).toHaveText(title);
+  await expect(page.locator(".pass-role")).toHaveText(title);
+  await expect(page.locator("#experience .experience-grid article")).toHaveCount(3);
+  await expect(page.locator("#about .education article")).toHaveCount(3);
+  await expect(page.locator("#experience")).toContainText("not part of the completed group application");
+  await page.getByRole("button",{name:"Read transcript"}).click();
+  await expect(page.locator("#portrait-transcript")).toContainText(title);
+  await page.locator(".terminal-panel").getByRole("button",{name:"about",exact:true}).click();
+  await expect(page.locator(".terminal-panel").getByRole("log")).toContainText(title);
+});

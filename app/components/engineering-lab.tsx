@@ -2,6 +2,7 @@
 
 import {useEffect,useState} from "react";
 import {github,projects} from "../projects";
+import {profile} from "../profile";
 
 const scenarios=[
   {id:"ticket",name:"Service ticket workflow",steps:[
@@ -22,7 +23,7 @@ function terminalResponse(command:string):string[]{
     case "help":return ["Available commands: "+commands.join(", "),"This is a read-only portfolio terminal. No shell or external execution."];
     case "projects":return projects.map(p=>p.name+" — "+github+"/"+p.slug);
     case "stack":return ["Frontend: TypeScript, React, Next.js","Backend: ASP.NET Core, Node.js, PHP","Data & delivery: PostgreSQL, MySQL, Prisma, EF Core, Git, Docker","Current learning: applied AI, Python, FastAPI, RAG and agents"];
-    case "about":return ["Kevin Menuja — Sri Lankan full-stack developer and technology entrepreneur.","Completed Higher Diploma in Computing & Software Engineering and OTHM Level 3 Foundation Diploma."];
+    case "about":return [profile.name+" — "+profile.title+" and technology entrepreneur.","Completed Higher Diploma in Computing & Software Engineering and OTHM Level 3 Foundation Diploma."];
     case "contact":return ["Use the Contact section for email, LinkedIn and GitHub links."];
     default:return ["Unknown command. Type help to see the available commands."];
   }

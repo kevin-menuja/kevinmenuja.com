@@ -4,14 +4,15 @@ import "@fontsource-variable/inter/index.css";
 import "@fontsource-variable/jetbrains-mono/index.css";
 import "./globals.css";
 import {MotionSystem} from "./components/motion-system";
+import {profile} from "./profile";
 const production = process.env.VERCEL_ENV === "production";
 const host = (production ? process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_URL) || "localhost:3000";
 export const metadata: Metadata = {
  metadataBase: new URL(host === "localhost:3000" ? "http://" + host : "https://" + host),
- title: "Kevin Menuja — Full-stack developer & technology entrepreneur",
- description: "Explore Kevin Menuja's full-stack software engineering projects, technical case studies, completed computing qualifications and applied AI learning focus.",
- openGraph: { title: "Kevin Menuja — Software for real-world operations", description: "Full-stack engineering, real-world business systems and applied AI learning.", type: "website", images: [{url:"/images/kevin.webp",alt:"Kevin Menuja portrait"}] },
- twitter: {card:"summary",title:"Kevin Menuja — Full-stack developer"},
+ title: profile.name+" — "+profile.title,
+ description: profile.title+" based in Sri Lanka. Explore business software projects, technical case studies, completed computing qualifications and applied AI specialization.",
+ openGraph: { title: profile.name+" — "+profile.title, description: "Full-stack engineering, real-world business systems and applied AI learning.", type: "website", images: [{url:"/images/kevin.webp",alt:"Kevin Menuja portrait"}] },
+ twitter: {card:"summary",title:profile.name+" — "+profile.title},
  robots: {index:production,follow:production},
  icons:{icon:"/icon.svg"}
 };

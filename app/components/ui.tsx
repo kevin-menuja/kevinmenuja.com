@@ -2,6 +2,7 @@ import {ResponsiveImage} from "./responsive-image";
 import Link from "next/link";
 import {github,type Project} from "../projects";
 import {primaryDimensions} from "../project-evidence";
+import {profile} from "../profile";
 
 export function Arrow(){return <span aria-hidden="true">↗</span>}
 
@@ -49,7 +50,7 @@ export function ProjectCard({project:p}:{project:Project}){
 
 export function SiteFooter(){
   return <footer className="shell footer">
-    <div><Link href="/" className="footer-brand">Kevin Menuja<span>.</span></Link><p>Software development · Sri Lanka</p></div>
+    <div><Link href="/" className="footer-brand">Kevin Menuja<span>.</span></Link><p>{profile.title} · {profile.location}</p></div>
     <div className="footer-links"><a href={github}>GitHub <Arrow/></a><a href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><a href="#main">Back to top ↑</a></div>
     <span className="copyright">© 2026 Kevin Menuja</span>
   </footer>;

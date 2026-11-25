@@ -6,11 +6,7 @@ import {Arrow,ProjectCard,SectionHeading,SiteFooter} from "./components/ui";
 import {LanyardExperience} from "./components/lanyard-experience";
 import {SkillMatrix} from "./components/skill-matrix";
 
-const education=[
-  {title:"Higher Diploma in Computing & Software Engineering",detail:"ICBT Campus Colombo · Cardiff Metropolitan University affiliation"},
-  {title:"OTHM Level 3 Foundation Diploma in Higher Studies",detail:"ICBT Campus Colombo"},
-  {title:"G.C.E. Ordinary Level",detail:"Christ King College, Pannipitiya"}
-];
+import {profile} from "./profile";
 
 export default function Home(){
   return <>
@@ -18,18 +14,18 @@ export default function Home(){
     <SiteNav/>
     <main id="main" className="shell">
       <section className="hero cinematic-hero" aria-labelledby="hero-title">
-        <div className="hero-topline"><span className="eyebrow"><span className="dot"/> INDEPENDENT DEVELOPER / SRI LANKA</span><span className="eyebrow hero-edition">PORTFOLIO / 2026</span></div>
+        <div className="hero-topline"><span className="eyebrow"><span className="dot"/> SOFTWARE ENGINEER / SRI LANKA</span><span className="eyebrow hero-edition">PORTFOLIO / 2026</span></div>
         <h1 id="hero-title" className="hero-wordmark">KEVIN <span>MENUJA<span className="wordmark-dot">.</span></span></h1>
         <div className="hero-scene">
           <div className="hero-copy">
             <p className="eyebrow hero-kicker">01 / HELLO, I’M KEVIN</p>
-            <h2 className="hero-role">Full-stack<br/>developer<span>.</span></h2>
-            <p className="lead">I build software for real-world operations. Technology entrepreneur, with a growing focus on applied AI engineering.</p>
+            <h2 className="hero-role professional-title">{profile.titleLines.map((line,i)=><span className="role-line" key={line}>{line}{i<profile.titleLines.length-1?" ":""}</span>)}</h2>
+            <p className="lead">{profile.tagline}</p>
             <div className="actions">
               <a className="button primary" href="#work">Explore my work <span aria-hidden="true">↓</span></a>
               <a className="button secondary" href={github}>GitHub <Arrow/></a>
             </div>
-            <div className="hero-status"><span className="status-dot" aria-hidden="true"/> Open to remote opportunities</div>
+            <div className="hero-status"><span className="status-dot" aria-hidden="true"/> Open to international remote engineering opportunities</div>
           </div>
           <LivingPortrait/>
           <aside className="hero-side" aria-label="Developer identity">
@@ -52,28 +48,33 @@ export default function Home(){
       <section id="about" className="section about" aria-label="Professional background">
         <div className="about-copy">
           <p className="eyebrow"><span className="section-number">02</span> BACKGROUND</p>
-          <h2>Developer mindset.<br/><em>Founder ownership.</em></h2>
-          <p className="lead">I’m a Sri Lankan developer with a completed Higher Diploma and hands-on experience across frontend, backend, relational databases and deployment. Through Startek, I work on practical digital and business systems.</p>
-          <p className="lead">My goal is to build reliable software and grow into an applied AI engineer.</p>
+          <h2>Engineering mindset.<br/><em>Entrepreneurial ownership.</em></h2>
+          {profile.biography.map(paragraph=><p className="lead" key={paragraph}>{paragraph}</p>)}
           <a className="inline-link" href="https://www.linkedin.com/in/kevin-menuja-st20345403">Professional profile <Arrow/></a>
         </div>
         <div className="education">
           <p className="eyebrow">EDUCATION / COMPLETED</p>
-          {education.map((e,i)=><article key={e.title}><span className="timeline-index">0{i+1}</span><div><h3>{e.title}</h3><p>{e.detail}</p></div></article>)}
+          {profile.education.map((e,i)=><article key={e.title}><span className="timeline-index">0{i+1}</span><div><span className="education-status">{e.status}</span><h3>{e.title}</h3><p>{e.detail}</p><p className="education-note">{e.note}</p></div></article>)}
         </div>
       </section>
+      <section id="experience" className="section professional-experience" aria-labelledby="experience-title">
+        <p className="eyebrow"><span className="section-number">03</span> EXPERIENCE &amp; ENTREPRENEURSHIP</p>
+        <h2 id="experience-title">From business needs<br/><em>to working software.</em></h2>
+        <div className="experience-grid">{profile.experience.map(e=><article key={e.title}><p className="eyebrow">{e.label}</p><h3>{e.title}</h3><p>{e.description}</p>{"link" in e&&<a className="inline-link" href={e.link}>{e.linkLabel} <span aria-hidden="true">→</span></a>}</article>)}</div>
+      </section>
       <section id="skills" className="section" aria-label="Technical expertise">
-        <SectionHeading index="03" label="ENGINEERING TOOLKIT" title={<>From interface<br/><em>to infrastructure.</em></>} description="Technologies I’ve worked with, alongside the next areas of my engineering development."/>
+        <SectionHeading index="04" label="ENGINEERING TOOLKIT" title={<>From interface<br/><em>to infrastructure.</em></>} description="Full-stack capabilities backed by project work, AI-assisted development experience and my current applied AI specialization."/>
         <SkillMatrix/>
+        <div className="principles-grid">{profile.principles.map(p=><article key={p.title}><h3>{p.title}</h3><p>{p.description}</p></article>)}</div>
       </section>
       <section id="lab" className="section" aria-label="Interactive engineering lab">
-        <SectionHeading index="04" label="ENGINEERING PLAYGROUND" title={<>Engineering<br/><em>in motion.</em></>} description="Explore a transparent workflow simulation and a command-driven introduction to my work."/>
+        <SectionHeading index="05" label="ENGINEERING PLAYGROUND" title={<>Engineering<br/><em>in motion.</em></>} description="Explore a transparent workflow simulation and a command-driven introduction to my work."/>
         <EngineeringLab/>
       </section>
       <section id="contact" className="contact" aria-label="Contact">
-        <p className="eyebrow"><span className="section-number">05</span> CONTACT</p>
+        <p className="eyebrow"><span className="section-number">06</span> CONTACT</p>
         <div className="contact-layout">
-          <div><h2>Let’s build<br/><em>something useful.</em></h2><p>Open to international remote engineering opportunities, software collaborations and freelance projects.</p></div>
+          <div><h2>Let’s build<br/><em>something useful.</em></h2><p>{profile.opportunities}</p></div>
           <div className="contact-links"><a className="button primary" href="mailto:kevinmenuja11@gmail.com">Email me <Arrow/></a><a className="button secondary" href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><a className="button secondary" href={github}>GitHub <Arrow/></a></div>
         </div>
       </section>
