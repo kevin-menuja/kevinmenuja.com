@@ -62,3 +62,26 @@ test("accessibility baseline: home and representative case study",async({page})=
     expect(result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
   }
 });
+
+test("developer pass exposes real profile details and returns to portrait",async({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  await page.goto("/");
+  const toggle=page.getByRole("button",{name:"View profile details"});
+  await toggle.click();
+  await expect(page.getByRole("button",{name:"Back to portrait"})).toHaveAttribute("aria-expanded","true");
+  await expect(page.locator(".pass-details")).toContainText("Higher Diploma");
+  await page.getByRole("button",{name:"Back to portrait"}).press("Enter");
+  await expect(toggle).toHaveAttribute("aria-expanded","false");
+});
+
+test("technology matrix filters the learning focus distinctly",async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto("/");
+  const filter=page.getByRole("group",{name:"Filter technologies"});
+  await filter.getByRole("button",{name:"Applied AI",exact:true}).click();
+  await expect(page.locator(".matrix-group")).toHaveCount(1);
+  await expect(page.locator(".matrix-group")).toContainText("Current learning focus");
+  await expect(page.locator(".matrix-tiles li")).toHaveCount(7);
+  await filter.getByRole("button",{name:"All",exact:true}).click();
+  await expect(page.locator(".matrix-group")).toHaveCount(4);
+});
