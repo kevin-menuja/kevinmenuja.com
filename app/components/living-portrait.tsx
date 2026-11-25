@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import {ResponsiveImage} from "./responsive-image";
 import {useEffect,useRef,useState} from "react";
 
 const introduction="Hello, I’m Kevin Menuja, a full-stack developer and technology entrepreneur based in Sri Lanka. I build software for real-world business operations, and I’m developing deeper expertise in applied AI engineering. Explore my projects to see the applications, architecture and engineering evidence behind my work.";
@@ -50,7 +50,7 @@ export function LivingPortrait(){
   }
   return <figure ref={figure} className="cinematic-portrait living-portrait" onPointerMove={move} onPointerLeave={reset}>
     <div className="portrait-glow" aria-hidden="true"/>
-    <Image src="/images/kevin.webp" alt="Black-and-white studio portrait of Kevin Menuja" width={1024} height={1106} priority className="portrait" sizes="(max-width: 760px) 90vw, 480px"/>
+    <ResponsiveImage src="/images/kevin.webp" alt="Black-and-white studio portrait of Kevin Menuja" width={1024} height={1106} loading="eager" fetchPriority="high" className="portrait" sizes="(max-width: 760px) 90vw, 480px"/>
     <figcaption className="living-caption">
       <div className="portrait-caption-line"><span>KM / PROFILE</span><span>DEVELOPER · FOUNDER</span></div>
       <div className="portrait-actions">

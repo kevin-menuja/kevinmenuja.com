@@ -1,0 +1,164 @@
+{
+  "/images/kevin.webp": [
+    {
+      "url": "/images/responsive/kevin-256.webp",
+      "width": 256
+    },
+    {
+      "url": "/images/responsive/kevin-384.webp",
+      "width": 384
+    },
+    {
+      "url": "/images/responsive/kevin-512.webp",
+      "width": 512
+    },
+    {
+      "url": "/images/responsive/kevin-640.webp",
+      "width": 640
+    },
+    {
+      "url": "/images/responsive/kevin-800.webp",
+      "width": 800
+    },
+    {
+      "url": "/images/kevin.webp",
+      "width": 1024
+    }
+  ],
+  "/images/nwsdb.webp": [
+    {
+      "url": "/images/responsive/nwsdb-384.webp",
+      "width": 384
+    },
+    {
+      "url": "/images/responsive/nwsdb-512.webp",
+      "width": 512
+    },
+    {
+      "url": "/images/responsive/nwsdb-640.webp",
+      "width": 640
+    },
+    {
+      "url": "/images/responsive/nwsdb-800.webp",
+      "width": 800
+    },
+    {
+      "url": "/images/nwsdb.webp",
+      "width": 1000
+    }
+  ],
+  "/images/printxpress.webp": [
+    {
+      "url": "/images/responsive/printxpress-384.webp",
+      "width": 384
+    },
+    {
+      "url": "/images/printxpress.webp",
+      "width": 450
+    }
+  ],
+  "/images/rice-kottu-hut-pos.webp": [
+    {
+      "url": "/images/responsive/rice-kottu-hut-pos-384.webp",
+      "width": 384
+    },
+    {
+      "url": "/images/responsive/rice-kottu-hut-pos-512.webp",
+      "width": 512
+    },
+    {
+      "url": "/images/responsive/rice-kottu-hut-pos-640.webp",
+      "width": 640
+    },
+    {
+      "url": "/images/responsive/rice-kottu-hut-pos-800.webp",
+      "width": 800
+    },
+    {
+      "url": "/images/responsive/rice-kottu-hut-pos-1024.webp",
+      "width": 1024
+    },
+    {
+      "url": "/images/rice-kottu-hut-pos.webp",
+      "width": 1440
+    }
+  ],
+  "/images/serviceops.webp": [
+    {
+      "url": "/images/responsive/serviceops-384.webp",
+      "width": 384
+    },
+    {
+      "url": "/images/responsive/serviceops-512.webp",
+      "width": 512
+    },
+    {
+      "url": "/images/responsive/serviceops-640.webp",
+      "width": 640
+    },
+    {
+      "url": "/images/responsive/serviceops-800.webp",
+      "width": 800
+    },
+    {
+      "url": "/images/responsive/serviceops-1024.webp",
+      "width": 1024
+    },
+    {
+      "url": "/images/serviceops.webp",
+      "width": 1280
+    }
+  ],
+  "/images/startek-print-hub-pos.webp": [
+    {
+      "url": "/images/responsive/startek-print-hub-pos-384.webp",
+      "width": 384
+    },
+    {
+      "url": "/images/responsive/startek-print-hub-pos-512.webp",
+      "width": 512
+    },
+    {
+      "url": "/images/responsive/startek-print-hub-pos-640.webp",
+      "width": 640
+    },
+    {
+      "url": "/images/responsive/startek-print-hub-pos-800.webp",
+      "width": 800
+    },
+    {
+      "url": "/images/responsive/startek-print-hub-pos-1024.webp",
+      "width": 1024
+    },
+    {
+      "url": "/images/startek-print-hub-pos.webp",
+      "width": 1440
+    }
+  ],
+  "/images/swiftdrive.webp": [
+    {
+      "url": "/images/responsive/swiftdrive-384.webp",
+      "width": 384
+    },
+    {
+      "url": "/images/responsive/swiftdrive-512.webp",
+      "width": 512
+    },
+    {
+      "url": "/images/responsive/swiftdrive-640.webp",
+      "width": 640
+    },
+    {
+      "url": "/images/responsive/swiftdrive-800.webp",
+      "width": 800
+    },
+    {
+      "url": "/images/responsive/swiftdrive-1024.webp",
+      "width": 1024
+    },
+    {
+      "url": "/images/swiftdrive.webp",
+      "width": 1440
+    }
+  ]
+}

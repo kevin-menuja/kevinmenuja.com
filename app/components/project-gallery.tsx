@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import {ResponsiveImage} from "./responsive-image";
 import {useEffect,useRef,useState} from "react";
 import type {Project} from "../projects";
 import {additionalScreenshots,primaryDimensions,projectArchitecture} from "../project-evidence";
@@ -24,7 +25,7 @@ export function ProjectGallery({project:p}:{project:Project}){
   return <section className="evidence-gallery" aria-label="Application screenshots">
     <div className="gallery-heading"><p className="eyebrow">APPLICATION EVIDENCE / {String(slides.length).padStart(2,"0")} {slides.length===1?"VIEW":"VIEWS"}</p><button type="button" ref={openButton} className="gallery-open" onClick={()=>dialog.current?.showModal()}>View full screenshot <span aria-hidden="true">⤢</span></button></div>
     <figure className="case-figure">
-      <div className={"image-stage"+(slide.height>slide.width?" image-stage-phone":"")}><Image src={slide.src} alt={slide.alt} width={slide.width} height={slide.height} className="project-img" sizes="(max-width: 800px) 92vw, 1000px"/></div>
+      <div className={"image-stage"+(slide.height>slide.width?" image-stage-phone":"")}><ResponsiveImage src={slide.src} alt={slide.alt} width={slide.width} height={slide.height} className="project-img" sizes={slide.height>slide.width?"(max-width: 800px) 60vw, 400px":"(max-width: 800px) 90vw, 1000px"}/></div>
       <figcaption>{slide.note}</figcaption>
     </figure>
     {slides.length>1&&<div className="gallery-nav"><button type="button" aria-label="Previous screenshot" onClick={()=>change(-1)}>←</button><p aria-live="polite">Screenshot {index+1} of {slides.length}</p><button type="button" aria-label="Next screenshot" onClick={()=>change(1)}>→</button></div>}

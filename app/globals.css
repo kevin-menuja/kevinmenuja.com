@@ -450,3 +450,17 @@ html.motion-disabled .living-portrait .portrait {transform:none;transition:none;
 html.motion-disabled .lab-progress span{transition:none;}
 /* Keep the ambient portrait lighting within its own layout column. */
 .living-portrait{overflow:hidden;}
+
+/* Phase 1.7: reserve off-screen card layout and avoid costly mobile compositing. */
+@media (max-width: 1000px) {
+  .nav {backdrop-filter:none;background:var(--panel);}
+  .cinematic-portrait .portrait {mask-image:none;}
+  .portrait-glow {display:none;}
+  .project {content-visibility:auto;contain-intrinsic-size:auto 480px;}
+  .matrix-group {content-visibility:auto;contain-intrinsic-size:auto 220px;}
+  .lab-panel {content-visibility:auto;contain-intrinsic-size:auto 600px;}
+}
+@media (max-width:720px) {
+  .project {contain-intrinsic-size:auto 560px;}
+  .matrix-group {contain-intrinsic-size:auto 340px;}
+}

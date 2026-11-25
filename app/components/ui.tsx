@@ -1,4 +1,4 @@
-import Image from "next/image";
+import {ResponsiveImage} from "./responsive-image";
 import Link from "next/link";
 import {github,type Project} from "../projects";
 import {primaryDimensions} from "../project-evidence";
@@ -23,7 +23,7 @@ export function ProjectScreenshot({project:p,detail=false}:{project:Project;deta
   const [width,height]=primaryDimensions[p.slug]??[1000,720];
   return <figure className={detail?"case-figure":"project-figure"}>
     <div className={"image-stage"+(height>width?" image-stage-phone":"")}>
-      <Image src={p.image} alt={p.imageAlt??p.name+" application screenshot"} width={width} height={height} className="project-img" sizes={detail?"(max-width: 800px) 92vw, 1000px":"(max-width: 720px) 92vw, 520px"}/>
+      <ResponsiveImage src={p.image} alt={p.imageAlt??p.name+" application screenshot"} width={width} height={height} className="project-img" sizes={detail?"(max-width: 800px) 90vw, 1000px":height>width?"(max-width: 720px) 100px, 190px":"(max-width: 720px) 82vw, (max-width: 1100px) 46vw, 650px"}/>
     </div>
     <figcaption>{p.imageNote}</figcaption>
   </figure>;
@@ -32,15 +32,15 @@ export function ProjectScreenshot({project:p,detail=false}:{project:Project;deta
 export function ProjectCard({project:p}:{project:Project}){
   return <article className="project">
     <div className="project-top"><span className="project-number">{p.number}</span><span className="project-kind">{p.kind}</span></div>
-    <Link href={"/projects/"+p.slug} className="project-visual" aria-label={(p.imageNote??"Application screenshot")+" — read "+p.name+" case study"}>
+    <Link prefetch={false} href={"/projects/"+p.slug} className="project-visual" aria-label={(p.imageNote??"Application screenshot")+" — read "+p.name+" case study"}>
       <ProjectScreenshot project={p}/>
     </Link>
     <div className="project-info">
-      <h3><Link href={"/projects/"+p.slug}>{p.name}</Link></h3>
+      <h3><Link prefetch={false} href={"/projects/"+p.slug}>{p.name}</Link></h3>
       <p>{p.summary}</p>
       <TechTags items={p.stack}/>
       <div className="project-links">
-        <Link href={"/projects/"+p.slug} className="case-link">Case study <span aria-hidden="true">→</span></Link>
+        <Link prefetch={false} href={"/projects/"+p.slug} className="case-link">Case study <span aria-hidden="true">→</span></Link>
         <a href={github+"/"+p.slug} aria-label={"GitHub — source code for "+p.name}>GitHub <Arrow/></a>
       </div>
     </div>
