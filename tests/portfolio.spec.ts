@@ -276,3 +276,30 @@ test("professional identity is consistent and supported by public content",async
   await page.locator(".terminal-panel").getByRole("button",{name:"about",exact:true}).click();
   await expect(page.locator(".terminal-panel").getByRole("log")).toContainText(title);
 });
+
+test("project discovery supports category, technology and empty-state reset",async({page})=>{
+ await page.goto("/#work");
+ const filter=page.getByRole("group",{name:"Filter projects"});
+ await filter.getByRole("button",{name:"Business applications"}).click();
+ await expect(page.locator(".project")).toHaveCount(2);
+ await filter.getByRole("button",{name:"Academic projects"}).click();
+ await expect(page.locator(".project")).toHaveCount(3);
+ await filter.getByRole("button",{name:"All projects"}).click();
+ await page.getByRole("textbox",{name:"Search projects"}).fill("PostgreSQL");
+ await expect(page.locator(".project")).toHaveCount(3);
+ await page.getByRole("textbox",{name:"Search projects"}).fill("no matching thing");
+ await expect(page.locator(".project")).toHaveCount(0);
+ await page.getByRole("button",{name:"Clear filters"}).click();
+ await expect(page.locator(".project")).toHaveCount(6);
+});
+
+test("all case studies present contribution, decisions and pinned evidence",async({page})=>{
+ for(const slug of ["rice-and-kottu-hut-pos","serviceops-group-project","startek-print-hub-pos","nwsdb-smart-water-billing-system","printxpress","swiftdrive-rentals"]){
+  await page.goto("/projects/"+slug);
+  await expect(page.locator(".decision-grid article")).toHaveCount(3);
+  await expect(page.locator(".capability-grid li")).toHaveCount(6);
+  await expect(page.locator(".source-evidence article")).toHaveCount(4);
+  await expect(page.locator(".scope-block")).toBeVisible();
+  for(const link of await page.locator(".source-evidence a").all())expect(await link.getAttribute("href")).toMatch(new RegExp("github.com/kevin-menuja/"+slug+"/(blob|tree)/[a-f0-9]{40}/"));
+ }
+});

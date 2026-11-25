@@ -5,6 +5,7 @@ import {projects,github} from "../../projects";
 import {SiteNav} from "../../components/site-nav";
 import {Arrow,TechTags,SiteFooter} from "../../components/ui";
 import {ProjectGallery,ArchitectureExplorer} from "../../components/project-gallery";
+import {CaseStudyDetail} from "../../components/case-study-detail";
 
 export function generateStaticParams(){return projects.map(p=>({slug:p.slug}))}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
@@ -33,6 +34,7 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
       <ProjectGallery project={p}/>
       <ArchitectureExplorer slug={p.slug}/>
       <div className="case-details">{[["Problem",p.problem],["Implementation",p.implementation],["Engineering evidence",p.evidence],["Scope & limitations",p.limitations]].map(([title,body],i)=><section key={title}><span className="eyebrow">0{i+1}</span><h2>{title}</h2><p>{body}</p></section>)}</div>
+      <CaseStudyDetail slug={p.slug}/>
       <Link className="next-project" href={"/projects/"+next.slug}><div><p className="eyebrow">NEXT PROJECT / {next.number}</p><h2>{next.name}</h2></div><span aria-hidden="true">↗</span></Link>
     </main>
     <SiteFooter/>

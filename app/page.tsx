@@ -7,6 +7,8 @@ import {LanyardExperience} from "./components/lanyard-experience";
 import {SkillMatrix} from "./components/skill-matrix";
 
 import {profile} from "./profile";
+import {caseStudies} from "./case-studies";
+import {ProjectFilter} from "./components/project-filter";
 
 export default function Home(){
   return <>
@@ -42,7 +44,7 @@ export default function Home(){
       </div>
       <section id="work" className="section" aria-label="Selected work">
         <SectionHeading index="01" label="SELECTED WORK" title={<>Built to solve.<br/><em>Engineered to work.</em></>} description="Business applications, backend systems and academic collaborations. Explore the implementation, documented evidence and scope of each project."/>
-        <div className="project-grid">{projects.map(p=><ProjectCard key={p.slug} project={p}/>)}</div>
+        <ProjectFilter items={projects.map(p=>({slug:p.slug,category:caseStudies[p.slug].category,searchText:[p.name,p.kind,p.summary,...p.stack].join(" "),card:<ProjectCard project={p}/>}))}/>
         <div className="section-end"><a className="button secondary" href={github+"?tab=repositories"}>All repositories <Arrow/></a><span className="eyebrow">SOURCE CODE / DOCUMENTATION / REAL INTERFACES</span></div>
       </section>
       <section id="about" className="section about" aria-label="Professional background">
