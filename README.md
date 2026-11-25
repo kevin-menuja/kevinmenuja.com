@@ -1,77 +1,15 @@
-# Kevin Menuja — Personal Portfolio
-
-**Personal website and digital portfolio** for Kevin Menuja, a Sri Lankan developer and founder of Startek.
-
-**GitHub Pages project:** [kevin-menuja.github.io/kevinmenuja.com](https://kevin-menuja.github.io/kevinmenuja.com/)  
-**Source owner:** [@kevin-menuja](https://github.com/kevin-menuja)
-
-> The repository was transferred from `Startek-pvt-ltd` to the personal GitHub account. The GitHub Pages URL changed as part of the transfer; verify the new Pages publishing configuration and update external links.
-
-## Overview
-
-A responsive personal-brand website introducing Kevin Menuja's professional background, computing education, digital services, Startek business divisions, selected work, and contact channels.
-
-### Main sections
-
-- Hero introduction with portrait and calls to action
-- About, education timeline, and founder background
-- Web development, mobile development, digital marketing, UI/UX, and content services
-- Startek business identity and divisions
-- Selected work highlights
-- Email contact form and social links
-
-## Technology
-
-| Area | Implementation |
-| --- | --- |
-| Markup | HTML5 |
-| Styling | CSS3 and responsive layouts |
-| Interaction | Vanilla JavaScript |
-| Visual effects | HTML Canvas, particles, cursor effects, and Three.js loaded as an ES module from a CDN |
-| Hosting | GitHub Pages |
-
-The project is intentionally **static** and currently has no package manager, backend, database, or build step.
-
-## Local preview
-
-Clone this repository:
-
-```bash
-git clone https://github.com/kevin-menuja/kevinmenuja.com.git
-cd kevinmenuja.com
-```
-
-Serve the project locally (Python 3 example):
-
-```bash
-python3 -m http.server 8000
-```
-
-Open `http://localhost:8000/` in a browser. An internet connection is needed for remote fonts and Three.js assets.
-
-## Contact form behavior
-
-The site's contact form uses a `mailto:` action. **It is not connected to a backend form processor** and therefore depends on the visitor having a configured email client.
-
+# Kevin Menuja — Portfolio V2
+Professional engineering portfolio using Next.js App Router and TypeScript. V2 separates completed work from current AI learning, with six project case-study routes, repository links, and authentic source-derived previews where available. Diagrams on cards are labeled illustrations rather than screenshots.
+## Development
+Requires Node.js 22+.
+- npm ci
+- npm run dev
+- npm run lint
+- npm run typecheck
+- npm run build
 ## Deployment
-
-This is a GitHub Pages website. To verify or reconfigure deployment after ownership transfer:
-
-1. Open **Settings → Pages** in this repository.
-2. Verify the publishing source, branch, and folder match the static files on `main`.
-3. Open the new Pages URL and test desktop and mobile behavior.
-4. Update any old `startek-pvt-ltd.github.io` links on your CV, LinkedIn, and social profiles.
-
-## Portfolio maintenance checklist
-
-- [ ] Confirm the new GitHub Pages URL loads
-- [ ] Test navigation, responsiveness, and keyboard accessibility
-- [ ] Check contrast and reduced-motion behavior
-- [ ] Verify every social and GitHub link
-- [ ] Confirm the email contact flow on mobile and desktop
-- [ ] Review images for accessible alternative text and appropriate sizing
-- [ ] Add current full-stack and AI engineering project case studies when ready
-
----
-
-**Source and content ownership:** Kevin Menuja. Startek remains the name of the associated business and its divisions.
+Vercel, connected to the existing GitHub repository. The portfolio/v2 branch is the review branch; main is the original website until the new site is approved. No database, credentials, or contact backend is required. Contact links open email or LinkedIn directly.
+## Image provenance
+Portrait: existing Kevin.JPG from this repository, resized and converted to WebP. ServiceOps: checked-in operations-light.webp application preview. NWSDB: published admin-analytics.png report screenshot, previously privacy-reviewed. PrintXpress: published docs/screenshots/home.png historical screenshot. All images are labeled with their provenance; architecture illustrations are not application screenshots.
+## Maintenance
+Project entries and scope limitations are defined in app/projects.ts. Verify claims and links against the source repositories before publishing edits. Add a CV only when the owner supplies an approved version. Set canonical metadata, sitemap and public domain only once the intended production URL is confirmed. The old static website files remain on this branch for rollback context; main is unchanged.
