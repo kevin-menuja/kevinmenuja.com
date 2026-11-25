@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import "@fontsource-variable/manrope/index.css";
+import "@fontsource-variable/inter/index.css";
+import "@fontsource-variable/jetbrains-mono/index.css";
 import "./globals.css";
 const production = process.env.VERCEL_ENV === "production";
 const host = (production ? process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_URL) || "localhost:3000";

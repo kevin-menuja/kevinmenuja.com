@@ -1,0 +1,56 @@
+"use client";
+
+import Link from "next/link";
+import {useEffect, useRef, useState} from "react";
+
+const links = [
+  {label:"Work", href:"/#work"},
+  {label:"About", href:"/#about"},
+  {label:"Expertise", href:"/#skills"}
+];
+
+export function SiteNav(){
+  const [open,setOpen]=useState(false);
+  const toggle=useRef<HTMLButtonElement>(null);
+  const header=useRef<HTMLElement>(null);
+
+  useEffect(()=>{
+    if(!open)return;
+    const key=(event:KeyboardEvent)=>{
+      if(event.key==="Escape"){setOpen(false);toggle.current?.focus();}
+    };
+    const pointer=(event:PointerEvent)=>{
+      if(!header.current?.contains(event.target as Node))setOpen(false);
+    };
+    const media=window.matchMedia("(min-width: 721px)");
+    const resize=()=>{if(media.matches)setOpen(false);};
+    document.addEventListener("keydown",key);
+    document.addEventListener("pointerdown",pointer);
+    media.addEventListener("change",resize);
+    return ()=>{
+      document.removeEventListener("keydown",key);
+      document.removeEventListener("pointerdown",pointer);
+      media.removeEventListener("change",resize);
+    };
+  },[open]);
+
+  return <header className="header" ref={header}>
+    <nav className="shell nav" aria-label="Main navigation">
+      <Link href="/" className="brand" onClick={()=>setOpen(false)}>
+        <span className="mark" aria-hidden="true">KM<span>.</span></span>
+        <span className="brand-name">Kevin Menuja<span>SOFTWARE DEVELOPER</span></span>
+      </Link>
+      <div className="navlinks">
+        {links.map(l=><Link key={l.href} href={l.href}>{l.label}</Link>)}
+      </div>
+      <Link className="contact-nav" href="/#contact">Let’s connect <span aria-hidden="true">↗</span></Link>
+      <button className="nav-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-nav" aria-label={open?"Close navigation":"Open navigation"} onClick={()=>setOpen(v=>!v)}>
+        <span aria-hidden="true">{open?"×":"☰"}</span><span>{open?"Close":"Menu"}</span>
+      </button>
+    </nav>
+    <nav id="mobile-nav" className="mobile-nav shell" aria-label="Mobile navigation" hidden={!open}>
+      {links.map(l=><Link key={l.href} href={l.href} onClick={()=>setOpen(false)}>{l.label}<span aria-hidden="true">↗</span></Link>)}
+      <Link href="/#contact" onClick={()=>setOpen(false)}>Contact<span aria-hidden="true">↗</span></Link>
+    </nav>
+  </header>;
+}

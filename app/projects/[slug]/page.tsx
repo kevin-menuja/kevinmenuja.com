@@ -1,11 +1,38 @@
-import Image from "next/image";
 import Link from "next/link";
 import {notFound} from "next/navigation";
 import type {Metadata} from "next";
 import {projects,github} from "../../projects";
+import {SiteNav} from "../../components/site-nav";
+import {Arrow,ProjectScreenshot,TechTags,SiteFooter} from "../../components/ui";
+
 export function generateStaticParams(){return projects.map(p=>({slug:p.slug}))}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const p=projects.find(x=>x.slug===slug);return p?{title:p.name+" — Kevin Menuja",description:p.summary}:{}}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
+  const {slug}=await params;const p=projects.find(x=>x.slug===slug);
+  return p?{title:p.name+" — Kevin Menuja",description:p.summary}:{};
+}
+
 export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){
- const {slug}=await params;const p=projects.find(x=>x.slug===slug);if(!p)notFound();
- return <main className="shell case-page"><nav className="case-nav"><Link href="/#work">← All projects</Link><Link href="/">KM.</Link></nav><div className="case-head"><p className="eyebrow">{p.number} / {p.kind}</p><h1>{p.name}</h1><p className="lead">{p.summary}</p><div className="tags">{p.stack.map(t=><span key={t}>{t}</span>)}</div><div className="actions"><a className="button primary" href={github+"/"+p.slug}>View repository ↗</a>{p.doc&&<a className="button secondary" href={github+"/"+p.slug+"/blob/main/"+p.doc}>Source documentation ↗</a>}{p.live&&<a className="button secondary" href={p.live}>Evaluation deployment ↗</a>}</div></div>{p.image&&<figure className="case-figure"><Image src={p.image} alt={p.imageAlt!} width={1000} height={720} className={p.slug==="printxpress"?"phone-img":""}/><figcaption>{p.imageNote}</figcaption></figure>}<div className="case-details">{[["Problem",p.problem],["Implementation",p.implementation],["Engineering evidence",p.evidence],["Scope & limitations",p.limitations]].map(([title,body])=><section key={title}><h2>{title}</h2><p>{body}</p></section>)}</div><footer className="footer"><Link href="/#work">← Explore more projects</Link><span>Kevin Menuja · Project case study</span></footer></main>
+  const {slug}=await params;
+  const index=projects.findIndex(x=>x.slug===slug);
+  const p=projects[index];
+  if(!p)notFound();
+  const next=projects[(index+1)%projects.length];
+  return <>
+    <a className="skip" href="#main">Skip to content</a>
+    <SiteNav/>
+    <main id="main" className="shell case-page">
+      <nav className="case-nav" aria-label="Breadcrumb"><Link href="/#work">← Selected work</Link><span>PROJECT / {p.number}</span></nav>
+      <header className="case-head">
+        <p className="eyebrow">{p.kind}</p>
+        <h1>{p.name}</h1>
+        <p className="lead">{p.summary}</p>
+        <TechTags items={p.stack}/>
+        <div className="actions"><a className="button primary" href={github+"/"+p.slug}>View repository <Arrow/></a>{p.doc&&<a className="button secondary" href={github+"/"+p.slug+"/blob/main/"+p.doc}>Source documentation <Arrow/></a>}{p.live&&<a className="button secondary" href={p.live}>{p.slug==="rice-and-kottu-hut-pos"?"Evaluation deployment":"Application"} <Arrow/></a>}</div>
+      </header>
+      <ProjectScreenshot project={p} detail/>
+      <div className="case-details">{[["Problem",p.problem],["Implementation",p.implementation],["Engineering evidence",p.evidence],["Scope & limitations",p.limitations]].map(([title,body],i)=><section key={title}><span className="eyebrow">0{i+1}</span><h2>{title}</h2><p>{body}</p></section>)}</div>
+      <Link className="next-project" href={"/projects/"+next.slug}><div><p className="eyebrow">NEXT PROJECT / {next.number}</p><h2>{next.name}</h2></div><span aria-hidden="true">↗</span></Link>
+    </main>
+    <SiteFooter/>
+  </>;
 }
