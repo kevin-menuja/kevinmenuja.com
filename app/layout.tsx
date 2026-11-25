@@ -3,6 +3,7 @@ import "@fontsource-variable/manrope/index.css";
 import "@fontsource-variable/inter/index.css";
 import "@fontsource-variable/jetbrains-mono/index.css";
 import "./globals.css";
+import {MotionSystem} from "./components/motion-system";
 const production = process.env.VERCEL_ENV === "production";
 const host = (production ? process.env.VERCEL_PROJECT_PRODUCTION_URL : process.env.VERCEL_URL) || "localhost:3000";
 export const metadata: Metadata = {
@@ -15,5 +16,5 @@ export const metadata: Metadata = {
  icons:{icon:"/icon.svg"}
 };
 export default function RootLayout({children}:{children:React.ReactNode}) {
- return <html lang="en"><body>{children}</body></html>;
+ return <html lang="en"><body>{children}<MotionSystem/></body></html>;
 }

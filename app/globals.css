@@ -334,3 +334,38 @@ h2 em, h1 em { color: var(--accent); font-style: normal; }
  .matrix-toolbar .eyebrow { font-size:10px; }
 }
 @media(prefers-reduced-motion:reduce) { .developer-pass,.developer-pass:hover,.developer-pass:focus-within { transform:none; } }
+
+/* Phase 1.2 — motion is an optional progressive enhancement. */
+html.motion-active {scroll-behavior:auto;}
+html.lenis,html.lenis body {height:auto;}
+.lenis.lenis-smooth {scroll-behavior:auto!important;}
+.lenis.lenis-stopped:not(.lenis-autoToggle) {overflow:hidden;}
+.lenis.lenis-smooth iframe {pointer-events:none;}
+.reading-progress {position:fixed;inset:0 0 auto;height:2px;z-index:45;pointer-events:none;}
+.reading-progress>div {height:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;}
+.motion-toggle {position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:30;display:flex;align-items:center;gap:7px;min-height:44px;padding:8px 13px;border:1px solid var(--control-border);border-radius:999px;background:#171a1ff5;color:var(--ink);font:500 10px/1.4 var(--mono);box-shadow:0 4px 18px #0005;}
+.motion-toggle>span {color:var(--accent);}
+.motion-toggle:disabled {opacity:.8;cursor:default;}
+.motion-active .cinematic-hero::before {content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,45%),#cfe8b00b,transparent 46%);}
+@media(prefers-reduced-motion:no-preference){
+  .motion-active .mark {animation:km-mark-in .45s ease-out both;}
+  @keyframes km-mark-in{from{opacity:.65;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+}
+@media(max-width:720px){.motion-toggle{position:static;margin:0 var(--gutter) 18px auto;}}
+/* Phase 1.3 — opt-in real WebGL rendering, with accessible HTML fallback. */
+.lanyard-experience {min-width:0;}
+.lanyard-open {display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px auto 0;width:min(100%,214px);min-height:44px;border-radius:7px;padding:8px 10px;background:var(--stage);border:1px solid var(--control-border);color:var(--accent);font:500 10px/1.4 var(--mono);}
+.lanyard-open:hover,.lanyard-controls button:hover{border-color:var(--accent);background:#252f28;}
+.lanyard-viewport {position:relative;width:100%;height:clamp(275px,25vw,365px);border:1px solid var(--line);border-radius:12px;overflow:hidden;background:radial-gradient(ellipse at center,#202c23,#0b0d10 76%);}
+.lanyard-viewport canvas {display:block;width:100%;height:100%;outline:none;}
+.lanyard-viewport>.lanyard-status {position:absolute;inset:0;display:grid;place-content:center;padding:10px;}
+.lanyard-hint,.lanyard-status {font-size:10px;line-height:1.5;color:var(--muted);text-align:center;margin:8px 0;}
+.lanyard-controls {display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.lanyard-controls button {border:1px solid var(--control-border);background:var(--panel);border-radius:5px;font:500 10px/1.5 var(--body);min-height:44px;padding:5px;}
+.lanyard-controls button:last-child {grid-column:1/-1;}
+.lanyard-controls button:disabled {opacity:.55;cursor:default;}
+.sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+@media(prefers-reduced-motion:reduce){.reading-progress{display:none}.motion-active .cinematic-hero::before{display:none}}
+html.motion-disabled {scroll-behavior:auto;}
+html.motion-disabled .hero-wordmark,html.motion-disabled .hero-scene,html.motion-disabled .mark{animation:none!important;}
+html.motion-disabled .button,html.motion-disabled .project-img,html.motion-disabled .developer-pass {transition:none!important;transform:none!important;}

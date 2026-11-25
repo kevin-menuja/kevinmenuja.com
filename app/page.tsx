@@ -2,7 +2,7 @@ import Image from "next/image";
 import {github,projects} from "./projects";
 import {SiteNav} from "./components/site-nav";
 import {Arrow,ProjectCard,SectionHeading,SiteFooter} from "./components/ui";
-import {DeveloperPass} from "./components/developer-pass";
+import {LanyardExperience} from "./components/lanyard-experience";
 import {SkillMatrix} from "./components/skill-matrix";
 
 const education=[
@@ -36,7 +36,7 @@ export default function Home(){
             <figcaption className="portrait-label"><span>KM / PROFILE</span><span>DEVELOPER · FOUNDER</span></figcaption>
           </figure>
           <aside className="hero-side" aria-label="Developer identity">
-            <DeveloperPass/>
+            <LanyardExperience/>
             <div className="hero-side-caption"><span className="eyebrow">BUILD / LEARN / SHIP</span><p>Software with purpose.<br/>Engineering with ownership.</p></div>
           </aside>
         </div>

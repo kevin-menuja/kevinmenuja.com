@@ -85,3 +85,70 @@ test("technology matrix filters the learning focus distinctly",async({page})=>{
   await filter.getByRole("button",{name:"All",exact:true}).click();
   await expect(page.locator(".matrix-group")).toHaveCount(4);
 });
+
+test("motion preference can be switched off and survives navigation",async({page})=>{
+  await page.emulateMedia({reducedMotion:"no-preference"});
+  await page.goto("/");
+  const motion=page.locator(".motion-toggle");
+  await expect(motion).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator("html")).toHaveClass(/motion-active/);
+  await motion.click();
+  await expect(motion).toHaveAttribute("aria-pressed","false");
+  await expect(page.locator("html")).toHaveClass(/motion-disabled/);
+  await page.reload();
+  await expect(motion).toHaveAttribute("aria-pressed","false");
+  await motion.click();
+  await expect(page.locator("html")).toHaveClass(/motion-active/);
+  await page.getByRole("link",{name:"Explore my work"}).click();
+  await expect(page).toHaveURL(/#work$/);
+});
+
+test("system reduced-motion setting disables animated scrolling",async({page})=>{
+  await page.emulateMedia({reducedMotion:"reduce"});
+  await page.goto("/");
+  await expect(page.locator(".motion-toggle")).toBeDisabled();
+  await expect(page.locator("html")).toHaveClass(/motion-disabled/);
+  await expect(page.locator(".hero-wordmark")).toBeVisible();
+});
+
+test("3D pass supports drag, flip, reset and return to standard view",async({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  await page.emulateMedia({reducedMotion:"no-preference"});
+  const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
+  await page.goto("/");
+  await page.getByRole("button",{name:"Explore 3D pass"}).click();
+  const viewport=page.locator(".lanyard-viewport[data-state='3d']");
+  await expect(viewport).toBeVisible({timeout:20000});
+  const canvas=viewport.locator("canvas");
+  await expect(canvas).toBeVisible();
+  const b=await canvas.boundingBox();
+  if(!b)throw new Error("3D canvas missing");
+  await page.mouse.move(b.x+b.width/2,b.y+b.height*.5);
+  await page.mouse.down();await page.mouse.move(b.x+b.width*.78,b.y+b.height*.58,{steps:8});await page.mouse.up();
+  await page.getByRole("button",{name:"Flip pass"}).click();
+  await expect(page.getByRole("button",{name:"Flip pass"})).toHaveAttribute("aria-pressed","true");
+  await page.getByRole("button",{name:"Reset",exact:true}).click();
+  await expect(page.getByRole("button",{name:"Flip pass"})).toHaveAttribute("aria-pressed","false");
+  await page.waitForTimeout(600);
+  await viewport.screenshot({path:"test-results/lanyard-3d.png"});
+  await page.getByRole("button",{name:"Standard view"}).click();
+  await expect(page.getByRole("button",{name:"View profile details"})).toBeVisible();
+  await expect(canvas).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
+test("3D pass falls back when WebGL is unavailable",async({page})=>{
+  await page.setViewportSize({width:1440,height:900});
+  await page.addInitScript(()=>{
+    const original=HTMLCanvasElement.prototype.getContext;
+    // Browser capability simulation: only block WebGL, preserve 2D canvas.
+    Object.defineProperty(HTMLCanvasElement.prototype,"getContext",{value:function(this:HTMLCanvasElement,type:string,...args:unknown[]){
+      if(type.startsWith("webgl"))return null;
+      return Reflect.apply(original,this,[type,...args]);
+    }});
+  });
+  await page.goto("/");
+  await page.getByRole("button",{name:"Explore 3D pass"}).click();
+  await expect(page.getByRole("status").filter({hasText:"3D rendering unavailable"})).toBeVisible({timeout:20000});
+  await expect(page.getByRole("button",{name:"View profile details"})).toBeVisible();
+});
