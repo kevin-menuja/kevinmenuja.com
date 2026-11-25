@@ -9,7 +9,8 @@ const links = [
   {label:"About", href:"/#about"},
   {label:"Experience", href:"/#experience"},
   {label:"Expertise", href:"/#skills"},
-  {label:"Lab", href:"/#lab"}
+  {label:"Lab", href:"/#lab"},
+  {label:"Insights", href:"/insights"}
 ];
 
 export function SiteNav(){
@@ -25,7 +26,7 @@ export function SiteNav(){
     const pointer=(event:PointerEvent)=>{
       if(!header.current?.contains(event.target as Node))setOpen(false);
     };
-    const media=window.matchMedia("(min-width: 721px)");
+    const media=window.matchMedia("(min-width: 1001px)");
     const resize=()=>{if(media.matches)setOpen(false);};
     document.addEventListener("keydown",key);
     document.addEventListener("pointerdown",pointer);
@@ -39,21 +40,21 @@ export function SiteNav(){
 
   return <header className="header" ref={header}>
     <nav className="shell nav" aria-label="Main navigation">
-      <Link href="/" className="brand" onClick={()=>setOpen(false)}>
+      <Link prefetch={false} href="/" className="brand" onClick={()=>setOpen(false)}>
         <span className="mark" aria-hidden="true">KM<span>.</span></span>
         <span className="brand-name">Kevin Menuja<span className="brand-role" title={profile.title}>AI POWERED ENGINEER</span></span>
       </Link>
       <div className="navlinks">
-        {links.map(l=><Link key={l.href} href={l.href}>{l.label}</Link>)}
+        {links.map(l=><Link prefetch={false} key={l.href} href={l.href}>{l.label}</Link>)}
       </div>
-      <Link className="contact-nav" href="/#contact">Let’s connect <span aria-hidden="true">↗</span></Link>
+      <Link prefetch={false} className="contact-nav" href="/#contact">Let’s connect <span aria-hidden="true">↗</span></Link>
       <button className="nav-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-nav" aria-label={open?"Close navigation":"Open navigation menu"} onClick={()=>setOpen(v=>!v)}>
         <span aria-hidden="true">{open?"×":"☰"}</span><span>{open?"Close":"Menu"}</span>
       </button>
     </nav>
     <nav id="mobile-nav" className="mobile-nav shell" aria-label="Mobile navigation" hidden={!open}>
-      {links.map(l=><Link key={l.href} href={l.href} onClick={()=>setOpen(false)}>{l.label}<span aria-hidden="true">↗</span></Link>)}
-      <Link href="/#contact" onClick={()=>setOpen(false)}>Contact<span aria-hidden="true">↗</span></Link>
+      {links.map(l=><Link prefetch={false} key={l.href} href={l.href} onClick={()=>setOpen(false)}>{l.label}<span aria-hidden="true">↗</span></Link>)}
+      <Link prefetch={false} href="/#contact" onClick={()=>setOpen(false)}>Contact<span aria-hidden="true">↗</span></Link>
     </nav>
   </header>;
 }

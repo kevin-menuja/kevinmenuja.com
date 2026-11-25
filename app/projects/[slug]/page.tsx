@@ -10,7 +10,7 @@ import {CaseStudyDetail} from "../../components/case-study-detail";
 export function generateStaticParams(){return projects.map(p=>({slug:p.slug}))}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
   const {slug}=await params;const p=projects.find(x=>x.slug===slug);
-  return p?{title:p.name+" — Kevin Menuja",description:p.summary}:{};
+  return p?{title:p.name+" — Kevin Menuja",description:p.summary,alternates:{canonical:"/projects/"+p.slug}}:{};
 }
 
 export default async function ProjectPage({params}:{params:Promise<{slug:string}>}){
@@ -23,7 +23,7 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
     <a className="skip" href="#main">Skip to content</a>
     <SiteNav/>
     <main id="main" className="shell case-page">
-      <nav className="case-nav" aria-label="Breadcrumb"><Link href="/#work">← Selected work</Link><span>PROJECT / {p.number}</span></nav>
+      <nav className="case-nav" aria-label="Breadcrumb"><Link prefetch={false} href="/#work">← Selected work</Link><span>PROJECT / {p.number}</span></nav>
       <header className="case-head">
         <p className="eyebrow">{p.kind}</p>
         <h1>{p.name}</h1>
@@ -35,7 +35,7 @@ export default async function ProjectPage({params}:{params:Promise<{slug:string}
       <ArchitectureExplorer slug={p.slug}/>
       <div className="case-details">{[["Problem",p.problem],["Implementation",p.implementation],["Engineering evidence",p.evidence],["Scope & limitations",p.limitations]].map(([title,body],i)=><section key={title}><span className="eyebrow">0{i+1}</span><h2>{title}</h2><p>{body}</p></section>)}</div>
       <CaseStudyDetail slug={p.slug}/>
-      <Link className="next-project" href={"/projects/"+next.slug}><div><p className="eyebrow">NEXT PROJECT / {next.number}</p><h2>{next.name}</h2></div><span aria-hidden="true">↗</span></Link>
+      <Link prefetch={false} className="next-project" href={"/projects/"+next.slug}><div><p className="eyebrow">NEXT PROJECT / {next.number}</p><h2>{next.name}</h2></div><span aria-hidden="true">↗</span></Link>
     </main>
     <SiteFooter/>
   </>;

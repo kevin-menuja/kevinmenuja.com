@@ -50,8 +50,8 @@ export function ProjectCard({project:p}:{project:Project}){
 
 export function SiteFooter(){
   return <footer className="shell footer">
-    <div><Link href="/" className="footer-brand">Kevin Menuja<span>.</span></Link><p>{profile.title} · {profile.location}</p></div>
-    <div className="footer-links"><a href={github}>GitHub <Arrow/></a><a href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><a href="#main">Back to top ↑</a></div>
+    <div><Link prefetch={false} href="/" className="footer-brand">Kevin Menuja<span>.</span></Link><p>{profile.title} · {profile.location}</p></div>
+    <div className="footer-links"><a href={github}>GitHub <Arrow/></a><a href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><Link href="/privacy" prefetch={false}>Privacy &amp; analytics</Link><a href="#main">Back to top ↑</a></div>
     <span className="copyright">© 2026 Kevin Menuja</span>
   </footer>;
 }

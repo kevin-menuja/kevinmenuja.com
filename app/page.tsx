@@ -9,6 +9,11 @@ import {SkillMatrix} from "./components/skill-matrix";
 import {profile} from "./profile";
 import {caseStudies} from "./case-studies";
 import {ProjectFilter} from "./components/project-filter";
+import {ContactComposer} from "./components/contact-composer";
+import {articles} from "./insights-data";
+import Link from "next/link";
+
+export const metadata={alternates:{canonical:"/"}};
 
 export default function Home(){
   return <>
@@ -73,12 +78,18 @@ export default function Home(){
         <SectionHeading index="05" label="ENGINEERING PLAYGROUND" title={<>Engineering<br/><em>in motion.</em></>} description="Explore a transparent workflow simulation and a command-driven introduction to my work."/>
         <EngineeringLab/>
       </section>
+      <section id="insights" className="section" aria-label="Technical insights">
+        <SectionHeading index="06" label="TECHNICAL INSIGHTS" title={<>Engineering<br/><em>in practice.</em></>} description="Explore technical notes based on my projects, implementation decisions and applied AI learning."/>
+        <div className="insight-grid">{articles.map(a=><article className="case-block" key={a.slug}><p className="eyebrow">{a.category}</p><h3><Link href={"/insights/"+a.slug} prefetch={false}>{a.title}</Link></h3><p>{a.description}</p><Link className="inline-link" href={"/insights/"+a.slug} prefetch={false}>Read article <Arrow/></Link></article>)}</div>
+        <div className="section-end"><Link className="button secondary" href="/insights" prefetch={false}>All technical insights <Arrow/></Link></div>
+      </section>
       <section id="contact" className="contact" aria-label="Contact">
-        <p className="eyebrow"><span className="section-number">06</span> CONTACT</p>
+        <p className="eyebrow"><span className="section-number">07</span> CONTACT</p>
         <div className="contact-layout">
           <div><h2>Let’s build<br/><em>something useful.</em></h2><p>{profile.opportunities}</p></div>
           <div className="contact-links"><a className="button primary" href="mailto:kevinmenuja11@gmail.com">Email me <Arrow/></a><a className="button secondary" href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><a className="button secondary" href={github}>GitHub <Arrow/></a></div>
         </div>
+        <ContactComposer/>
       </section>
     </main>
     <SiteFooter/>

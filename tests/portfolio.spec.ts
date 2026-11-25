@@ -303,3 +303,90 @@ test("all case studies present contribution, decisions and pinned evidence",asyn
   for(const link of await page.locator(".source-evidence a").all())expect(await link.getAttribute("href")).toMatch(new RegExp("github.com/kevin-menuja/"+slug+"/(blob|tree)/[a-f0-9]{40}/"));
  }
 });
+
+test("technical insight pages are discoverable and contain source-backed content",async({page})=>{
+ await page.goto("/#insights");
+ await expect(page.locator("#insights article")).toHaveCount(4);
+ await page.getByRole("link",{name:"All technical insights"}).click();
+ await expect(page).toHaveURL(/\/insights$/);
+ await expect(page.locator(".insight-grid article")).toHaveCount(4);
+ for(const slug of ["reliable-pos-checkout","service-oriented-architecture","preserving-financial-history","ai-assisted-engineering"]){
+  const response=await page.goto("/insights/"+slug);
+  expect(response?.status()).toBe(200);
+  await expect(page.locator("h1")).toHaveCount(1);
+  await expect(page.locator(".insight-section")).toHaveCount(4);
+  await expect(page.locator(".insight-toc a")).toHaveCount(4);
+  await expect(page.getByRole("link",{name:"Source documentation"})).toHaveAttribute("href",/github\.com\/kevin-menuja\/.+\/blob\/[a-f0-9]{40}\//);
+  await page.locator(".insight-toc a").first().click();
+  await expect(page).toHaveURL(/#section-1$/);
+ }
+});
+
+test("contact composer validates input and copies a synthetic draft using a test double",async({page})=>{
+ await page.addInitScript(()=>{
+   const output=document.createElement("textarea");
+   output.id="test-copy-output";
+   Object.defineProperty(navigator,"clipboard",{configurable:true,value:{writeText:async(s:string)=>{output.value=s;}}});
+   document.addEventListener("DOMContentLoaded",()=>{output.hidden=true;document.body.append(output);});
+ });
+ await page.goto("/#contact");
+ const form=page.locator(".contact-composer");
+ await expect(form).toBeVisible();
+ await form.getByRole("button",{name:"Copy draft"}).click();
+ expect(await form.locator("input:invalid").count()).toBeGreaterThan(0);
+ await form.getByLabel("Your name").fill("Example Recruiter");
+ await form.getByLabel("Email address").fill("invalid-address");
+ expect(await form.getByLabel("Email address").evaluate((el:HTMLInputElement)=>el.validity.typeMismatch)).toBe(true);
+ await form.getByLabel("Email address").fill("recruiter@example.test");
+ await form.getByLabel("Inquiry type").selectOption("Technical collaboration");
+ await form.getByLabel("Message",{exact:true}).fill("Hello, I would like to discuss a technical collaboration.");
+ await form.getByRole("button",{name:"Copy draft"}).click();
+ await expect(form.getByRole("status")).toContainText("Draft copied");
+ await expect(page.locator("#test-copy-output")).toHaveValue(/Subject: Technical collaboration/);
+ await expect(page.locator("#test-copy-output")).toHaveValue(/Reply email: recruiter@example.test/);
+ await form.getByLabel("Your name").fill("   ");
+ await form.getByRole("button",{name:"Copy draft"}).click();
+ await expect(form.getByRole("status")).toContainText("Enter your name");
+});
+
+test("preview privacy settings prevent measurement and preserve robots restrictions",async({page,request})=>{
+ await page.addInitScript(()=>localStorage.setItem("km-analytics","on"));
+ const requests:string[]=[];
+ page.on("request",r=>requests.push(r.url()));
+ await page.goto("/privacy");
+ await expect(page.locator(".analytics-preference")).toContainText("not enabled in this environment");
+ await expect(page.getByRole("button",{name:"Allow optional analytics"})).toHaveCount(0);
+ expect(requests.filter(url=>url.includes("/_vercel/insights/")||url.includes("/_vercel/speed-insights/"))).toEqual([]);
+ const home=await request.get("/");
+ const headers=home.headers();
+ expect(headers["x-content-type-options"]).toBe("nosniff");
+ expect(headers["x-frame-options"]).toBe("DENY");
+ expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
+ expect(await home.text()).toContain("noindex");
+ expect(await (await request.get("/robots.txt")).text()).toContain("Disallow: /");
+ const sitemap=await (await request.get("/sitemap.xml")).text();
+ expect(sitemap).not.toContain("<loc>");
+});
+
+test("new pages pass accessibility and responsive layout checks",async({page})=>{
+ for(const width of [320,390,768,1440]){
+  await page.setViewportSize({width,height:844});
+  for(const route of ["/insights","/insights/reliable-pos-checkout","/privacy","/#contact"]){
+   await page.goto(route);
+   await page.evaluate(()=>document.fonts.ready);
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),route+" at "+width).toBe(true);
+  }
+ }
+ await page.setViewportSize({width:390,height:844});
+ for(const route of ["/insights","/insights/reliable-pos-checkout","/privacy","/#contact"]){
+  await page.goto(route);
+  const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
+  expect(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),route).toEqual([]);
+ }
+});
+
+test("unknown project and article return not found",async({request})=>{
+ for(const route of ["/projects/nonexistent","/insights/nonexistent"]){
+  expect((await request.get(route)).status()).toBe(404);
+ }
+});
