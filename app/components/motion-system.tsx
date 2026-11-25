@@ -4,11 +4,19 @@ import {useEffect,useRef,useSyncExternalStore} from "react";
 import {usePathname} from "next/navigation";
 
 function prefersReduced(){return window.matchMedia("(prefers-reduced-motion: reduce)").matches;}
-function readMotion(){if(prefersReduced())return false;try{return localStorage.getItem("km-motion")!=="off";}catch{return true;}}
+function desktopMotionDefault(){return window.matchMedia("(min-width: 1024px) and (pointer: fine)").matches;}
+let transientMotionPreference:string|null=null;
+function readMotion(){
+  if(prefersReduced())return false;
+  let stored=transientMotionPreference;
+  try{stored=localStorage.getItem("km-motion")??stored;}catch{}
+  return stored==="on"||(stored!=="off"&&desktopMotionDefault());
+}
 function subscribeMotion(listener:()=>void){
   const mq=window.matchMedia("(prefers-reduced-motion: reduce)");
-  mq.addEventListener("change",listener);window.addEventListener("storage",listener);window.addEventListener("km-motion-change",listener);
-  return()=>{mq.removeEventListener("change",listener);window.removeEventListener("storage",listener);window.removeEventListener("km-motion-change",listener);};
+  const desktop=window.matchMedia("(min-width: 1024px) and (pointer: fine)");
+  desktop.addEventListener("change",listener);mq.addEventListener("change",listener);window.addEventListener("storage",listener);window.addEventListener("km-motion-change",listener);
+  return()=>{desktop.removeEventListener("change",listener);mq.removeEventListener("change",listener);window.removeEventListener("storage",listener);window.removeEventListener("km-motion-change",listener);};
 }
 const serverFalse=()=>false;
 
@@ -37,10 +45,10 @@ export function MotionSystem(){
       gsap.ticker.add(tick);lenis.on("scroll",ScrollTrigger.update);
       document.documentElement.classList.add("motion-active");
       const ctx=gsap.context(()=>{
-        const main=document.querySelector("main");
-        if(main&&!window.location.hash)gsap.fromTo(main,{opacity:.86,y:6},{opacity:1,y:0,duration:.36,ease:"power2.out",clearProps:"opacity,transform"});
+        const entry=document.querySelector(".hero-copy,.case-head");
+        if(entry&&!window.location.hash)gsap.fromTo(entry,{opacity:.94,y:4},{opacity:1,y:0,duration:.3,ease:"power2.out",clearProps:"opacity,transform"});
         // Only animate in-view entry, never make text inaccessible or dependent on JS.
-        gsap.utils.toArray<HTMLElement>(".section-head,.project,.education,.matrix,.contact,.case-details section").forEach(el=>{
+        gsap.utils.toArray<HTMLElement>(".section-head,.project,.education,.matrix,.contact,.case-details section,.architecture-explorer,.lab-panel").forEach(el=>{
           gsap.fromTo(el,{y:14,opacity:.94},{y:0,opacity:1,duration:.55,ease:"power2.out",clearProps:"opacity,transform",scrollTrigger:{trigger:el,start:"top 92%",once:true}});
         });
         if(progress.current)gsap.to(progress.current,{scaleX:1,ease:"none",scrollTrigger:{start:0,end:()=>Math.max(1,document.documentElement.scrollHeight-window.innerHeight),scrub:true}});
@@ -63,7 +71,8 @@ export function MotionSystem(){
     return()=>{disposed=true;teardown();};
   },[active,pathname]);
   function toggle(){
-    try{localStorage.setItem("km-motion",active?"off":"on");}catch{}
+    transientMotionPreference=active?"off":"on";
+    try{localStorage.setItem("km-motion",transientMotionPreference);}catch{}
     window.dispatchEvent(new Event("km-motion-change"));
   }
   return <>

@@ -1,4 +1,5 @@
-import Image from "next/image";
+import {LivingPortrait} from "./components/living-portrait";
+import {EngineeringLab} from "./components/engineering-lab";
 import {github,projects} from "./projects";
 import {SiteNav} from "./components/site-nav";
 import {Arrow,ProjectCard,SectionHeading,SiteFooter} from "./components/ui";
@@ -30,11 +31,7 @@ export default function Home(){
             </div>
             <div className="hero-status"><span className="status-dot" aria-hidden="true"/> Open to remote opportunities</div>
           </div>
-          <figure className="cinematic-portrait">
-            <div className="portrait-glow" aria-hidden="true"/>
-            <Image src="/images/kevin.webp" alt="Black-and-white studio portrait of Kevin Menuja" width={1024} height={1106} priority className="portrait" sizes="(max-width: 760px) 90vw, 480px"/>
-            <figcaption className="portrait-label"><span>KM / PROFILE</span><span>DEVELOPER · FOUNDER</span></figcaption>
-          </figure>
+          <LivingPortrait/>
           <aside className="hero-side" aria-label="Developer identity">
             <LanyardExperience/>
             <div className="hero-side-caption"><span className="eyebrow">BUILD / LEARN / SHIP</span><p>Software with purpose.<br/>Engineering with ownership.</p></div>
@@ -69,8 +66,12 @@ export default function Home(){
         <SectionHeading index="03" label="ENGINEERING TOOLKIT" title={<>From interface<br/><em>to infrastructure.</em></>} description="Technologies I’ve worked with, alongside the next areas of my engineering development."/>
         <SkillMatrix/>
       </section>
+      <section id="lab" className="section" aria-label="Interactive engineering lab">
+        <SectionHeading index="04" label="ENGINEERING PLAYGROUND" title={<>Engineering<br/><em>in motion.</em></>} description="Explore a transparent workflow simulation and a command-driven introduction to my work."/>
+        <EngineeringLab/>
+      </section>
       <section id="contact" className="contact" aria-label="Contact">
-        <p className="eyebrow"><span className="section-number">04</span> CONTACT</p>
+        <p className="eyebrow"><span className="section-number">05</span> CONTACT</p>
         <div className="contact-layout">
           <div><h2>Let’s build<br/><em>something useful.</em></h2><p>Open to international remote engineering opportunities, software collaborations and freelance projects.</p></div>
           <div className="contact-links"><a className="button primary" href="mailto:kevinmenuja11@gmail.com">Email me <Arrow/></a><a className="button secondary" href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><a className="button secondary" href={github}>GitHub <Arrow/></a></div>

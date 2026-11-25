@@ -369,3 +369,84 @@ html.lenis,html.lenis body {height:auto;}
 html.motion-disabled {scroll-behavior:auto;}
 html.motion-disabled .hero-wordmark,html.motion-disabled .hero-scene,html.motion-disabled .mark{animation:none!important;}
 html.motion-disabled .button,html.motion-disabled .project-img,html.motion-disabled .developer-pass {transition:none!important;transform:none!important;}
+
+/* Phase 1.4 — a living photographic portrait; no facial synthesis. */
+.living-portrait {display:flex;flex-direction:column;align-items:center;justify-content:end;overflow:visible;}
+.living-portrait .portrait {transform:translate3d(var(--portrait-x,0),var(--portrait-y,0),0);transition:transform .22s ease-out;flex:none;max-height:480px;}
+.living-caption {width:100%;position:relative;z-index:3;background:var(--paper);padding:8px 4px 4px;}
+.portrait-caption-line {display:flex;justify-content:space-between;gap:8px;color:var(--muted);font:500 9px/1.5 var(--mono);}
+.portrait-actions {display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.portrait-control {flex:1;min-height:44px;border:1px solid var(--control-border);border-radius:6px;background:var(--panel);padding:7px 9px;font-size:11px;font-weight:600;color:var(--ink);}
+.portrait-control:hover {border-color:var(--accent);color:var(--accent);}
+.voice-note {color:var(--muted);font-size:10px;margin-top:4px;}
+.voice-note:empty {display:none;}
+.portrait-transcript {font-size:13px;line-height:1.7;padding:12px;margin-top:8px;background:var(--panel);border:1px solid var(--line);border-radius:6px;}
+html.motion-disabled .living-portrait .portrait {transform:none;transition:none;}
+@media(prefers-reduced-motion:reduce){.living-portrait .portrait{transform:none;transition:none;}}
+
+/* Phase 1.5 — honest, self-contained engineering playground. */
+.lab-grid {display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px;}
+.lab-panel {min-width:0;padding:clamp(16px,2.5vw,26px);border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);}
+.lab-head {display:flex;align-items:start;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.lab-head h3 {font-size:clamp(22px,2.5vw,30px);margin-top:8px;}
+.lab-indicator {color:var(--accent);font:500 9px/1.4 var(--mono);border:1px solid #51634b;padding:5px 7px;border-radius:4px;flex:none;}
+.lab-disclosure {color:var(--muted);font-size:12px;line-height:1.7;margin:8px 0;}
+.lab-label {display:block;font-size:12px;margin:16px 0 6px;color:var(--ink);}
+.workflow-panel select {width:100%;min-height:44px;background:var(--paper);border:1px solid var(--control-border);border-radius:6px;padding:8px 12px;color:var(--ink);font:inherit;font-size:13px;}
+.workflow-panel select:focus-visible,.terminal-form input:focus-visible {outline:2px solid var(--accent);outline-offset:3px;}
+.lab-progress {height:4px;background:var(--line);border-radius:4px;margin:18px 0;overflow:hidden;}
+.lab-progress span {display:block;height:100%;background:var(--accent);transition:width .2s;}
+.workflow-steps {list-style:none;padding:0;margin:0;display:grid;gap:8px;}
+.workflow-steps li {display:grid;grid-template-columns:23px minmax(0,1fr) auto;gap:9px;padding:12px;border:1px solid var(--line);border-radius:7px;background:var(--stage);}
+.workflow-steps li[data-state="active"] {border-color:var(--accent);}
+.workflow-steps li[data-state="done"] {border-color:#53694e;}
+.workflow-index {font:500 11px/1.7 var(--mono);color:var(--accent);}
+.workflow-steps strong {font-size:14px;}
+.workflow-steps p {font-size:12px;line-height:1.6;color:var(--muted);margin-top:4px;}
+.workflow-steps .workflow-output {color:var(--accent);border-top:1px solid var(--line);padding-top:6px;}
+.step-state {font:500 9px/1.7 var(--mono);color:var(--muted);}
+.workflow-steps li[data-state="done"] .step-state,.workflow-steps li[data-state="active"] .step-state {color:var(--accent);}
+.lab-controls {display:flex;flex-wrap:wrap;gap:7px;margin-top:15px;}
+.lab-controls .button {cursor:pointer;font-size:11px;min-height:44px;padding:8px 11px;}
+.lab-controls .button:disabled {cursor:default;opacity:.6;transform:none;}
+.terminal-screen {height:320px;overflow:auto;overscroll-behavior:contain;background:#0a0c0e;border:1px solid var(--line);border-radius:8px;padding:16px;color:var(--muted);font:400 12px/1.7 var(--mono);overflow-wrap:anywhere;}
+.terminal-screen>div {padding-top:12px;}
+.terminal-screen p {margin:0 0 4px;}
+.terminal-prompt {color:var(--accent);}
+.terminal-form {display:flex;gap:7px;margin-top:12px;}
+.terminal-form input {min-width:0;flex:1;border:1px solid var(--control-border);background:var(--paper);color:var(--ink);border-radius:6px;padding:10px;font:400 13px/1.5 var(--mono);}
+.terminal-form button,.terminal-commands button {background:var(--stage);border:1px solid var(--control-border);border-radius:6px;padding:8px 11px;min-height:44px;font:500 12px/1.4 var(--mono);color:var(--accent);}
+.terminal-form button:hover,.terminal-commands button:hover {border-color:var(--accent);}
+.terminal-commands {display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+
+/* Phase 1.6 — source-backed screenshot galleries and architecture explorer. */
+.gallery-heading {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.gallery-open,.gallery-nav button,.dialog-head button {display:inline-flex;align-items:center;gap:9px;justify-content:center;min-height:44px;border:1px solid var(--control-border);border-radius:6px;padding:8px 12px;color:var(--accent);background:var(--panel);font-size:12px;font-weight:600;}
+.gallery-open:hover,.gallery-nav button:hover,.dialog-head button:hover {border-color:var(--accent);}
+.gallery-nav {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;}
+.gallery-nav p,.gallery-nav span {font:400 11px/1.5 var(--mono);color:var(--muted);}
+.gallery-nav button {min-width:44px;}
+.screenshot-dialog {padding:0;width:min(1100px,94vw);max-width:94vw;max-height:94dvh;border:1px solid var(--control-border);border-radius:14px;background:var(--panel);color:var(--ink);overflow:auto;}
+.screenshot-dialog::backdrop {background:#000c;backdrop-filter:blur(5px);}
+.dialog-inner {padding:clamp(10px,2vw,22px);}
+.dialog-head {display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;font-size:14px;font-weight:650;}
+.dialog-image {background:var(--paper);display:flex;justify-content:center;align-items:center;min-height:100px;}
+.dialog-image img {display:block;width:auto;max-width:100%;height:auto;max-height:68dvh;object-fit:contain;}
+.dialog-caption {font-size:12px;color:var(--muted);margin-top:12px;}
+.architecture-explorer {margin-top:30px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:clamp(16px,3vw,30px);}
+.architecture-explorer h2 {font-size:clamp(24px,3vw,34px);margin:9px 0 12px;}
+.architecture-note {font-size:13px;color:var(--muted);margin-bottom:18px;}
+.architecture-nodes {list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0;margin:0;}
+.architecture-nodes button {width:100%;height:100%;display:flex;flex-direction:column;align-items:start;gap:8px;text-align:left;background:var(--stage);border:1px solid var(--control-border);border-radius:8px;padding:14px;overflow-wrap:anywhere;}
+.architecture-nodes button[aria-pressed=true] {border-color:var(--accent);background:#222923;}
+.architecture-nodes strong {font-size:15px;}
+.architecture-nodes button>span:last-child {color:var(--muted);font-size:12px;}
+.architecture-detail {padding:17px 0 0;}
+.architecture-detail h3 {font-size:19px;color:var(--accent);}
+.architecture-detail p {font-size:14px;color:var(--muted);margin-top:6px;}
+@media(max-width:1000px){.navlinks{gap:2px}.navlinks a{padding:8px 9px}}
+@media(max-width:720px){.living-portrait .portrait{max-height:380px}.lab-grid{grid-template-columns:1fr}.architecture-nodes{grid-template-columns:1fr}.workflow-steps li{padding:10px;gap:6px}.lab-indicator{font-size:8px}.terminal-screen{height:260px}}
+@media(prefers-reduced-motion:reduce){.lab-progress span{transition:none}}
+html.motion-disabled .lab-progress span{transition:none;}
+/* Keep the ambient portrait lighting within its own layout column. */
+.living-portrait{overflow:hidden;}

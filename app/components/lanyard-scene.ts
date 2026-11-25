@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 type SceneControls={flip:()=>void;reset:()=>void;dispose:()=>void};
-type Options={onLost:()=>void;reduced:boolean};
+type Options={onLost:()=>void;reduced:()=>boolean};
 
 function cardTexture(back:boolean){
   const canvas=document.createElement("canvas");canvas.width=640;canvas.height=880;
@@ -45,7 +45,7 @@ export function createLanyard(host:HTMLElement,options:Options):SceneControls{
   const strapGeo=new THREE.BoxGeometry(.13,.83,.035);const strap=new THREE.Mesh(strapGeo,strapMat);strap.position.y=-.42;pivot.add(strap);
   const pinGeo=new THREE.SphereGeometry(.075,12,12);const pin=new THREE.Mesh(pinGeo,side);pin.position.copy(pivot.position);scene.add(pin);
   const canvas=renderer.domElement;canvas.setAttribute("aria-hidden","true");canvas.style.touchAction="none";host.appendChild(canvas);
-  let width=0,height=0,frame=0,last=0,visible=true,drag=false,angle=options.reduced?0:.10,velocity=0,target=0,yaw=.14,yawVelocity=0,face=0;
+  let width=0,height=0,frame=0,last=0,visible=true,drag=false,angle=options.reduced()?0:.10,velocity=0,target=0,yaw=.14,yawVelocity=0,face=0;
   let startX=0,startY=0,startAngle=0,startYaw=0;
   const clamp=(x:number,a:number,b:number)=>Math.max(a,Math.min(b,x));
   function resize(){
@@ -55,7 +55,7 @@ export function createLanyard(host:HTMLElement,options:Options):SceneControls{
   function draw(t:number){
     frame=0;if(disposed||!visible||document.hidden)return;
     const dt=last?Math.min((t-last)/1000,.032):1/60;last=t;
-    if(!drag&&options.reduced){angle=0;velocity=0;yaw=target;yawVelocity=0;}
+    if(!drag&&options.reduced()){angle=0;velocity=0;yaw=target;yawVelocity=0;}
     else if(!drag){
       // Damped pendulum restoring torque + angular damping, semi-implicit integration.
       velocity+=(-17*Math.sin(angle)-5.8*velocity)*dt;angle+=velocity*dt;
@@ -77,7 +77,7 @@ export function createLanyard(host:HTMLElement,options:Options):SceneControls{
   const io=new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??false;if(visible)wake();else{cancelAnimationFrame(frame);frame=0;last=0;}},{rootMargin:"80px"});io.observe(host);
   document.addEventListener("visibilitychange",visibility);resize();
   return {
-    flip(){face=1-face;target=face*Math.PI;if(options.reduced){yaw=target;angle=0;}wake();},
+    flip(){face=1-face;target=face*Math.PI;if(options.reduced()){yaw=target;angle=0;}wake();},
     reset(){face=0;target=0;angle=0;velocity=0;yaw=0;yawVelocity=0;wake();},
     dispose(){
       disposed=true;img.onload=null;cancelAnimationFrame(frame);ro.disconnect();io.disconnect();document.removeEventListener("visibilitychange",visibility);

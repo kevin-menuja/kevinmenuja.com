@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {github,type Project} from "../projects";
+import {primaryDimensions} from "../project-evidence";
 
 export function Arrow(){return <span aria-hidden="true">↗</span>}
 
@@ -15,19 +16,11 @@ export function TechTags({items}:{items:string[]}){
   return <ul className="tags" aria-label="Technologies">{items.map(t=><li key={t}>{t}</li>)}</ul>;
 }
 
-// Native dimensions preserve the entire source screenshot, including its actual UI.
-const dimensions:Record<string,[number,number]>={
-  "/images/rice-kottu-hut-pos.webp":[1440,1000],
-  "/images/serviceops.webp":[1280,889],
-  "/images/startek-print-hub-pos.webp":[1440,811],
-  "/images/nwsdb.webp":[1000,586],
-  "/images/printxpress.webp":[450,919],
-  "/images/swiftdrive.webp":[1440,960]
-};
+// Dimensions are shared with the screenshot gallery.
 
 export function ProjectScreenshot({project:p,detail=false}:{project:Project;detail?:boolean}){
   if(!p.image)return null;
-  const [width,height]=dimensions[p.image]??[1000,720];
+  const [width,height]=primaryDimensions[p.slug]??[1000,720];
   return <figure className={detail?"case-figure":"project-figure"}>
     <div className={"image-stage"+(height>width?" image-stage-phone":"")}>
       <Image src={p.image} alt={p.imageAlt??p.name+" application screenshot"} width={width} height={height} className="project-img" sizes={detail?"(max-width: 800px) 92vw, 1000px":"(max-width: 720px) 92vw, 520px"}/>

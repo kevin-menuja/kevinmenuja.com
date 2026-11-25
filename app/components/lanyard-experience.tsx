@@ -18,7 +18,7 @@ export function LanyardExperience(){
         // Do not request the 3D bundle until the visitor explicitly chooses it.
         const {createLanyard}=await import("./lanyard-scene");
         if(cancelled||!host.current)return;
-        controls.current=createLanyard(host.current,{onLost:()=>setMode("unavailable"),reduced:matchMedia("(prefers-reduced-motion: reduce)").matches});
+        controls.current=createLanyard(host.current,{onLost:()=>setMode("unavailable"),reduced:()=>matchMedia("(prefers-reduced-motion: reduce)").matches||document.documentElement.classList.contains("motion-disabled")});
         setMode("3d");
       }catch{if(!cancelled)setMode("unavailable");}
     }

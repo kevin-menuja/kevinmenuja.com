@@ -6,7 +6,8 @@ import {useEffect, useRef, useState} from "react";
 const links = [
   {label:"Work", href:"/#work"},
   {label:"About", href:"/#about"},
-  {label:"Expertise", href:"/#skills"}
+  {label:"Expertise", href:"/#skills"},
+  {label:"Lab", href:"/#lab"}
 ];
 
 export function SiteNav(){
@@ -44,7 +45,7 @@ export function SiteNav(){
         {links.map(l=><Link key={l.href} href={l.href}>{l.label}</Link>)}
       </div>
       <Link className="contact-nav" href="/#contact">Let’s connect <span aria-hidden="true">↗</span></Link>
-      <button className="nav-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-nav" aria-label={open?"Close navigation":"Open navigation"} onClick={()=>setOpen(v=>!v)}>
+      <button className="nav-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-nav" aria-label={open?"Close navigation":"Open navigation menu"} onClick={()=>setOpen(v=>!v)}>
         <span aria-hidden="true">{open?"×":"☰"}</span><span>{open?"Close":"Menu"}</span>
       </button>
     </nav>
