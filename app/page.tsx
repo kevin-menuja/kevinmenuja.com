@@ -31,6 +31,7 @@ export default function Home(){
             <div className="actions">
               <a className="button primary" href="#work">Explore my work <span aria-hidden="true">↓</span></a>
               <a className="button secondary" href={github}>GitHub <Arrow/></a>
+              <Link className="button secondary" prefetch={false} href="/resume">View CV <Arrow/></Link>
             </div>
             <div className="hero-status"><span className="status-dot" aria-hidden="true"/> Open to international remote engineering opportunities</div>
           </div>

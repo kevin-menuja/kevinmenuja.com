@@ -14,8 +14,9 @@ try{
  assert(!home.includes('content="noindex'),"Unexpected production noindex");
  assert(home.includes("https://portfolio.example.test"));
  const sitemap=await (await fetch(url+"/sitemap.xml")).text();
- assert.equal((sitemap.match(/<loc>/g)||[]).length,13);
+ assert.equal((sitemap.match(/<loc>/g)||[]).length,14);
  assert(sitemap.includes("https://portfolio.example.test/insights/ai-assisted-engineering"));
+ assert(sitemap.includes("https://portfolio.example.test/resume"));
  const robots=await (await fetch(url+"/robots.txt")).text();
  assert(robots.includes("Allow: /"));
  assert(robots.includes("https://portfolio.example.test/sitemap.xml"));
@@ -41,5 +42,5 @@ try{
  await page.getByRole("button",{name:"Allow optional analytics"}).waitFor();
  assert.equal(await page.evaluate(()=>localStorage.getItem("km-analytics")),"off");
  assert.deepEqual(errors,[]);
- console.log("PRODUCTION_MODE_PASS: indexing, 13 sitemap URLs, consent opt-in and withdrawal; telemetry intercepted");
+ console.log("PRODUCTION_MODE_PASS: indexing, 14 sitemap URLs, consent opt-in and withdrawal; telemetry intercepted");
 }finally{await browser?.close();proc.kill("SIGTERM");}

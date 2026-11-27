@@ -552,3 +552,21 @@ html.motion-disabled .lab-progress span{transition:none;}
 .analytics-preference button{justify-self:start;}
 @media(max-width:1000px){.navlinks,.contact-nav{display:none}.nav-toggle{display:flex}.mobile-nav:not([hidden]){display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin-top:5px}.insight-grid .case-block,.contact-composer{content-visibility:auto;contain-intrinsic-size:auto 240px}}
 @media(max-width:720px){.insight-grid,.contact-fields{grid-template-columns:1fr}.contact-composer{contain-intrinsic-size:auto 610px}}
+
+/* Recruiter profile: direct, accessible access to the downloadable résumé. */
+.recruitment-page{max-width:1040px;}
+.recruitment-title{font-size:clamp(23px,4vw,37px);color:var(--accent);font-weight:700;line-height:1.2;margin:12px 0;}
+.recruitment-note{color:var(--muted);font-size:12px;margin-top:14px;}
+.recruitment-page .case-block{margin-bottom:16px;}
+.recruitment-links{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;overflow-wrap:anywhere;}
+.recruitment-links a{color:var(--accent);text-decoration:underline;text-underline-offset:4px;font-size:13px;min-height:28px;}
+.recruitment-skills{display:grid;gap:13px;margin:0;}
+.recruitment-skills>div{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;}
+.recruitment-skills dt{font-weight:650;color:var(--ink);}
+.recruitment-skills dd{margin:0;color:var(--muted);font-size:14px;line-height:1.65;}
+.recruitment-projects{display:grid;gap:12px;margin-bottom:16px;}
+.recruitment-projects article{border:1px solid var(--line);border-radius:8px;background:var(--stage);padding:16px;}
+.recruitment-projects h3{font-size:19px;margin:6px 0 8px;}
+.recruitment-stack{margin-top:8px;font-size:12px!important;}
+@media(max-width:1200px){.navlinks,.contact-nav{display:none}.nav-toggle{display:flex}.mobile-nav:not([hidden]){display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin-top:5px}}
+@media(max-width:720px){.recruitment-skills>div{grid-template-columns:1fr;gap:5px}.recruitment-links{gap:10px}}

@@ -10,7 +10,8 @@ const links = [
   {label:"Experience", href:"/#experience"},
   {label:"Expertise", href:"/#skills"},
   {label:"Lab", href:"/#lab"},
-  {label:"Insights", href:"/insights"}
+  {label:"Insights", href:"/insights"},
+  {label:"CV", href:"/resume"}
 ];
 
 export function SiteNav(){
@@ -26,7 +27,7 @@ export function SiteNav(){
     const pointer=(event:PointerEvent)=>{
       if(!header.current?.contains(event.target as Node))setOpen(false);
     };
-    const media=window.matchMedia("(min-width: 1001px)");
+    const media=window.matchMedia("(min-width: 1201px)");
     const resize=()=>{if(media.matches)setOpen(false);};
     document.addEventListener("keydown",key);
     document.addEventListener("pointerdown",pointer);

@@ -37,7 +37,7 @@ try{
    assert.equal(await page.getByRole("dialog").locator("img").getAttribute("src"),"/images/gallery/serviceops-inventory.webp");
    await page.getByRole("dialog").getByRole("button",{name:"Close"}).click();
    assert.equal(await page.getByRole("dialog").isVisible(),false);
-   for(const route of ["/insights","/insights/reliable-pos-checkout","/insights/service-oriented-architecture","/insights/preserving-financial-history","/insights/ai-assisted-engineering","/privacy"]){
+   for(const route of ["/insights","/insights/reliable-pos-checkout","/insights/service-oriented-architecture","/insights/preserving-financial-history","/insights/ai-assisted-engineering","/privacy","/resume"]){
     assert.equal((await page.goto(url+route)).status(),200);
     assert.equal(await page.locator("h1").count(),1);
     assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),route+" overflow");
@@ -46,7 +46,7 @@ try{
    await page.locator(".contact-composer").getByRole("button",{name:"Copy draft"}).click();
    assert(await page.locator(".contact-composer input:invalid").count()>0);
    assert.deepEqual(errors,[]);
-   console.log(name+": PASS (homepage, six project pages, mobile layout, portrait, lab, architecture, gallery, insights, contact and privacy)");
+   console.log(name+": PASS (homepage, six project pages, mobile layout, portrait, lab, architecture, gallery, insights, contact, privacy and CV)");
   }finally{await browser?.close();}
  }
 }finally{proc.kill("SIGTERM");}

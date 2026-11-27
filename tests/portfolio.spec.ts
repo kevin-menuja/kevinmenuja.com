@@ -390,3 +390,41 @@ test("unknown project and article return not found",async({request})=>{
   expect((await request.get(route)).status()).toBe(404);
  }
 });
+
+test("recruiter profile and PDF download preserve the approved identity",async({page,request})=>{
+ await page.setViewportSize({width:1440,height:900});
+ await page.goto("/");
+ await page.getByRole("link",{name:"View CV",exact:true}).click();
+ await expect(page).toHaveURL(/\/resume$/);
+ await expect(page.locator("h1")).toHaveText("Kevin Menuja");
+ await expect(page.locator(".recruitment-title")).toHaveText("AI Powered Full-Stack Software Engineer");
+ await expect(page.locator(".recruitment-projects").first().locator("article")).toHaveCount(4);
+ await expect(page.locator(".recruitment-projects").last().locator("article")).toHaveCount(3);
+ await expect(page.locator(".recruitment-page")).toContainText("AI Copilot remains a future direction");
+ await expect(page.getByRole("link",{name:"Contact for recruitment"})).toHaveAttribute("href",/^mailto:kevinmenuja11@gmail\.com\?subject=/);
+ const response=await request.get("/downloads/Kevin-Menuja-CV.pdf");
+ expect(response.status()).toBe(200);
+ expect(response.headers()["content-type"]).toContain("application/pdf");
+ expect((await response.body()).subarray(0,5).toString()).toBe("%PDF-");
+ const downloadPromise=page.waitForEvent("download");
+ await page.getByRole("link",{name:"Download CV (PDF)"}).click();
+ const download=await downloadPromise;
+ expect(download.suggestedFilename()).toBe("Kevin-Menuja-CV.pdf");
+ expect(await download.failure()).toBeNull();
+});
+
+test("recruitment page fits supported widths and passes accessibility scan",async({page})=>{
+ for(const width of [320,390,768,1024,1280,1440]){
+  await page.setViewportSize({width,height:900});
+  await page.goto("/resume");
+  await page.evaluate(()=>document.fonts.ready);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),"CV at "+width).toBe(true);
+  await expect(page.getByRole("link",{name:"Download CV (PDF)"})).toBeVisible();
+ }
+ await page.setViewportSize({width:390,height:844});
+ await page.goto("/resume");
+ const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
+ expect(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
+ await page.getByRole("button",{name:"Open navigation menu"}).click();
+ await expect(page.getByRole("navigation",{name:"Mobile navigation"}).getByRole("link",{name:"CV",exact:true})).toBeVisible();
+});

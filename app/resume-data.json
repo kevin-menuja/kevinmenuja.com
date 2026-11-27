@@ -1,0 +1,28 @@
+{
+  "name": "Kevin Menuja",
+  "title": "AI Powered Full-Stack Software Engineer",
+  "location": "Sri Lanka",
+  "email": "kevinmenuja11@gmail.com",
+  "github": "https://github.com/kevin-menuja",
+  "linkedin": "https://www.linkedin.com/in/kevin-menuja-st20345403",
+  "summary": "Software engineer, freelancer and technology entrepreneur with hands-on full-stack development experience in business applications and academic software projects. Develops responsive interfaces, REST APIs, relational data models and operational workflows using TypeScript, React, Next.js and ASP.NET Core. Uses AI-assisted development and prompt engineering while building deeper expertise in applied AI integration.",
+  "skills": [
+    {"label":"Frontend","text":"TypeScript, JavaScript, React, Next.js, HTML, CSS"},
+    {"label":"Backend and data","text":"C#, ASP.NET Core, REST APIs, Node.js, PHP, PostgreSQL, MySQL, Prisma, EF Core"},
+    {"label":"Engineering practices","text":"Git, Docker, automated testing, role-based access, documentation"},
+    {"label":"AI development","text":"AI-assisted development, prompt engineering; current learning: Python, FastAPI, LLM APIs, RAG, agent workflows and evaluations"}
+  ],
+  "projects": [
+    {"name":"Rice & Kottu Hut POS","slug":"rice-and-kottu-hut-pos","role":"Independent business application","stack":"Next.js, TypeScript, Prisma, PostgreSQL","text":"Independently developed restaurant POS with server-priced checkout, transactional order and tender recording, duplicate-submit protection, role-aware workflows and historical receipt snapshots."},
+    {"name":"ServiceOps","slug":"serviceops-group-project","role":"Five-person academic group project","stack":"Next.js, ASP.NET Core, PostgreSQL","text":"Allocated project management, solution architecture and backend integration responsibilities. The completed group application covers service requests, dispatch and inventory; AI Copilot remains a future direction."},
+    {"name":"Startek Print Hub POS","slug":"startek-print-hub-pos","role":"Business operations project","stack":"Next.js, TypeScript, Prisma, PostgreSQL","text":"Print-shop operations system with quotations, invoicing, job tracking, register workflows and history-preserving archive boundaries."},
+    {"name":"NWSDB Smart Water Billing","slug":"nwsdb-smart-water-billing-system","role":"Individual academic project","stack":"C#, ASP.NET Core, EF Core, SQL","text":"Layered service-oriented application for meters, tariffs, billing and payments. Published historical validation records 36 passing unit tests; educational simulation only."}
+  ],
+  "experience": {"heading":"Technology entrepreneurship and freelance development","text":"Startek (PVT) LTD: entrepreneurial work across web development, digital marketing and printing services; building practical business software and exploring SaaS opportunities."},
+  "education": [
+    {"title":"Higher Diploma in Computing & Software Engineering","detail":"ICBT Campus Colombo | Cardiff Metropolitan University (UK) affiliation | Completed"},
+    {"title":"OTHM Level 3 Foundation Diploma in Higher Studies","detail":"ICBT Campus Colombo | Completed"},
+    {"title":"G.C.E. Ordinary Level","detail":"Christ King College, Pannipitiya | Completed"}
+  ],
+  "opportunities": "Open to international remote software engineering opportunities, freelance development and technical collaborations."
+}
