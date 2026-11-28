@@ -349,3 +349,30 @@ test("motion is enabled on mobile and desktop, respecting system preference",asy
   await expect(page.locator(".motion-toggle")).toHaveCount(0);
  }
 });
+
+test("recorded introduction serves the real MP3 and supports blocked autoplay",async({page,request})=>{
+ const media=await request.get("/audio/introduction.mp3");
+ expect(media.status()).toBe(200);
+ expect(media.headers()["content-type"]).toContain("audio/mpeg");
+ expect((await media.body()).length).toBe(316268);
+ await page.addInitScript(()=>{
+  const original=HTMLMediaElement.prototype.play;
+  let calls=0;
+  Object.defineProperty(HTMLMediaElement.prototype,"play",{configurable:true,value:function(this:HTMLMediaElement){calls++;if(calls===1)return Promise.reject(new DOMException("Autoplay blocked","NotAllowedError"));return original.call(this);}});
+ });
+ await page.goto("/");
+ const audio=page.locator(".recorded-intro audio");
+ await expect(audio).toHaveAttribute("src","/audio/introduction.mp3");
+ await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.duration)).toBeGreaterThan(26);
+ await page.getByRole("button",{name:"Enable introduction audio"}).click();
+ await expect(page.getByRole("button",{name:"Pause introduction"})).toBeVisible();
+ await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(0);
+ await page.getByRole("button",{name:"Pause introduction"}).click();
+ await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(true);
+ await expect(page.getByRole("button",{name:"Enable introduction audio"})).toBeVisible();
+ await page.locator(".intro-transcript summary").click();
+ await expect(page.locator(".intro-transcript")).toContainText("AI Powered Full-Stack Software Engineer");
+ await page.reload();
+ await expect(page.getByRole("button",{name:"Enable introduction audio"})).toBeVisible();
+ expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(true);
+});
