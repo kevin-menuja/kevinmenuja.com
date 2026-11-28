@@ -597,3 +597,8 @@ html.motion-disabled .lab-progress span{transition:none;}
  @keyframes km-entry{from{opacity:.94;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
  @supports(animation-timeline:scroll()){.native-motion .reading-progress>div{animation:km-progress linear both;animation-timeline:scroll(root block)}@keyframes km-progress{from{transform:scaleX(0)}to{transform:scaleX(1)}}}
 }
+
+/* Shared, compact sound control. Native audio persists across client navigation. */
+.sound-toggle{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex:none;border:1px solid var(--control-border);border-radius:8px;background:var(--panel);color:var(--ink);}
+.sound-toggle:hover{border-color:var(--accent);color:var(--accent);}
+@media(max-width:720px){.sound-toggle{width:36px;min-height:44px}.brand{min-width:0}.brand-name{overflow-wrap:anywhere}.nav{gap:5px}}

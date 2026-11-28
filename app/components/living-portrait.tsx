@@ -1,8 +1,8 @@
 "use client";
 import {ResponsiveImage} from "./responsive-image";
 import {useEffect,useRef} from "react";
-import {RecordedIntro} from "./recorded-intro";
-export function LivingPortrait({audioSrc}:{audioSrc?:string}){
+
+export function LivingPortrait(){
  const figure=useRef<HTMLElement>(null);
  const frame=useRef(0);
   function reset(){
@@ -25,6 +25,6 @@ export function LivingPortrait({audioSrc}:{audioSrc?:string}){
  return <figure ref={figure} className="cinematic-portrait living-portrait" onPointerMove={move} onPointerLeave={reset}>
  <div className="portrait-glow" aria-hidden="true"/>
  <ResponsiveImage src="/images/kevin.webp" alt="Black-and-white studio portrait of Kevin Menuja" width={1024} height={1106} loading="eager" fetchPriority="high" className="portrait" sizes="(max-width: 760px) 90vw, 480px"/>
- {audioSrc&&<figcaption className="living-caption"><RecordedIntro src={audioSrc}/></figcaption>}
+ <figcaption className="living-caption"><details className="intro-transcript"><summary>Introduction script</summary><p>Hello, I’m Kevin Menuja, an AI Powered Full-Stack Software Engineer and technology entrepreneur from Sri Lanka.</p><p>I’m passionate about building intelligent software solutions that solve real-world business problems.</p><p>My work combines full-stack development, modern technologies and AI-powered engineering.</p><p>Welcome to my portfolio. Explore my projects, discover my experience, and let’s build something meaningful together.</p></details></figcaption>
  </figure>;
 }

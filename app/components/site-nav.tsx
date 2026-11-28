@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {profile} from "../profile";
+import {SoundToggle} from "./site-audio";
 import {ThemeToggle} from "./theme-toggle";
 import {useEffect, useRef, useState} from "react";
 
@@ -49,7 +50,7 @@ export function SiteNav(){
         {links.map(l=><Link prefetch={false} key={l.href} href={l.href}>{l.label}</Link>)}
       </div>
       <Link prefetch={false} className="contact-nav" href="/#contact">Let’s connect <span aria-hidden="true">↗</span></Link>
-      <ThemeToggle/>
+      <SoundToggle/><ThemeToggle/>
       <button className="nav-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-nav" aria-label={open?"Close navigation":"Open navigation menu"} onClick={()=>setOpen(v=>!v)}>
         <span aria-hidden="true">{open?"×":"☰"}</span><span>{open?"Close":"Menu"}</span>
       </button>

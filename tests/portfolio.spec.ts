@@ -350,29 +350,53 @@ test("motion is enabled on mobile and desktop, respecting system preference",asy
  }
 });
 
-test("recorded introduction serves the real MP3 and supports blocked autoplay",async({page,request})=>{
- const media=await request.get("/audio/introduction.mp3");
- expect(media.status()).toBe(200);
- expect(media.headers()["content-type"]).toContain("audio/mpeg");
- expect((await media.body()).length).toBe(316268);
+test("site audio plays voice then loops music, persists across client navigation",async({page,request})=>{
+ const voice=await request.get("/audio/introduction.mp3");
+ expect(voice.status()).toBe(200);
+ expect((await voice.body()).length).toBe(316268);
+ const music=await request.get("/audio/ambient.m4a");
+ expect(music.status()).toBe(200);
+ expect((await music.body()).length).toBeGreaterThan(200000);
  await page.addInitScript(()=>{
   const original=HTMLMediaElement.prototype.play;
   let calls=0;
   Object.defineProperty(HTMLMediaElement.prototype,"play",{configurable:true,value:function(this:HTMLMediaElement){calls++;if(calls===1)return Promise.reject(new DOMException("Autoplay blocked","NotAllowedError"));return original.call(this);}});
  });
+ await page.setViewportSize({width:1440,height:900});
  await page.goto("/");
- const audio=page.locator(".recorded-intro audio");
+ const audio=page.locator("#site-audio");
  await expect(audio).toHaveAttribute("src","/audio/introduction.mp3");
  await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.duration)).toBeGreaterThan(26);
- await page.getByRole("button",{name:"Enable introduction audio"}).click();
- await expect(page.getByRole("button",{name:"Pause introduction"})).toBeVisible();
+ await page.getByRole("button",{name:"Enable website audio"}).click();
+ await expect(page.getByRole("button",{name:"Mute website audio"})).toBeVisible();
  await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(0);
- await page.getByRole("button",{name:"Pause introduction"}).click();
+ await audio.evaluate((a:HTMLAudioElement)=>{a.currentTime=a.duration-.25;});
+ await expect(audio).toHaveAttribute("src","/audio/ambient.m4a",{timeout:10000});
+ await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.duration)).toBeGreaterThan(59);
+ expect(await audio.evaluate((a:HTMLAudioElement)=>a.loop)).toBe(true);
+ await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(0);
+ await audio.evaluate((a:HTMLAudioElement)=>{a.currentTime=a.duration-.3;});
+ await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeLessThan(3);
+ expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(false);
+ await audio.evaluate((a:HTMLAudioElement)=>{a.dataset.persistence="yes";});
+ await page.locator(".navlinks").getByRole("link",{name:"Insights",exact:true}).click();
+ await expect(page).toHaveURL(/\/insights$/);
+ await expect(audio).toHaveAttribute("data-persistence","yes");
+ await expect(page.getByRole("button",{name:"Mute website audio"})).toBeVisible();
+ await page.getByRole("button",{name:"Mute website audio"}).click();
  await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(true);
- await expect(page.getByRole("button",{name:"Enable introduction audio"})).toBeVisible();
- await page.locator(".intro-transcript summary").click();
- await expect(page.locator(".intro-transcript")).toContainText("AI Powered Full-Stack Software Engineer");
  await page.reload();
- await expect(page.getByRole("button",{name:"Enable introduction audio"})).toBeVisible();
+ await expect(audio).toHaveAttribute("src","/audio/ambient.m4a");
  expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(true);
+ await expect(page.getByRole("button",{name:"Enable website audio"})).toBeVisible();
+});
+
+test("site audio attempts autoplay on arrival without a click",async({page})=>{
+ await page.addInitScript(()=>{
+  const original=HTMLMediaElement.prototype.play;
+  Object.defineProperty(HTMLMediaElement.prototype,"play",{configurable:true,value:function(this:HTMLMediaElement){this.dataset.autoplayAttempt="yes";return original.call(this);}});
+ });
+ await page.goto("/resume");
+ await expect(page.locator("#site-audio")).toHaveAttribute("data-autoplay-attempt","yes");
+ await expect(page.locator("#site-audio")).toHaveAttribute("src","/audio/introduction.mp3");
 });

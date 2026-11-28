@@ -3,6 +3,7 @@ import "@fontsource-variable/manrope/index.css";
 import "@fontsource-variable/inter/index.css";
 import "@fontsource-variable/jetbrains-mono/index.css";
 import "./globals.css";
+import {SiteAudio} from "./components/site-audio";
 import {MotionSystem} from "./components/motion-system";
 import {profile} from "./profile";
 import {PortfolioAnalytics} from "./components/portfolio-analytics";
@@ -18,5 +19,5 @@ export const metadata: Metadata = {
  icons:{icon:"/icon.svg"}
 };
 export default function RootLayout({children}:{children:React.ReactNode}) {
- return <html lang="en" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:"try{document.documentElement.dataset.theme=localStorage.getItem(\"km-theme\")==\"light\"?\"light\":\"dark\"}catch{}"}}/></head><body>{children}<MotionSystem/>{production&&process.env.NEXT_PUBLIC_ENABLE_ANALYTICS==="1"&&<PortfolioAnalytics/>}</body></html>;
+ return <html lang="en" suppressHydrationWarning><head><script dangerouslySetInnerHTML={{__html:"try{document.documentElement.dataset.theme=localStorage.getItem(\"km-theme\")==\"light\"?\"light\":\"dark\"}catch{}"}}/></head><body><SiteAudio>{children}</SiteAudio><MotionSystem/>{production&&process.env.NEXT_PUBLIC_ENABLE_ANALYTICS==="1"&&<PortfolioAnalytics/>}</body></html>;
 }

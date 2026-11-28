@@ -10,8 +10,6 @@ import {ProjectFilter} from "./components/project-filter";
 import {ContactComposer} from "./components/contact-composer";
 import {articles} from "./insights-data";
 import Link from "next/link";
-import {existsSync} from "node:fs";
-import {join} from "node:path";
 
 export const metadata={alternates:{canonical:"/"}};
 
@@ -35,7 +33,7 @@ export default function Home(){
             </div>
             <div className="hero-status"><span className="status-dot" aria-hidden="true"/> Open to international remote engineering opportunities</div>
           </div>
-          <LivingPortrait audioSrc={existsSync(join(process.cwd(),"public/audio/introduction.mp3"))?"/audio/introduction.mp3":undefined}/>
+          <LivingPortrait/>
         </div>
         <div className="hero-bottomline"><a className="scroll-cue" href="#work">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
       </section>
@@ -64,7 +62,7 @@ export default function Home(){
       <section id="experience" className="section professional-experience" aria-labelledby="experience-title">
         <p className="eyebrow"><span className="section-number">03</span> EXPERIENCE &amp; ENTREPRENEURSHIP</p>
         <h2 id="experience-title">From business needs<br/><em>to working software.</em></h2>
-        <div className="experience-grid">{profile.experience.map(e=><article key={e.title}><p className="eyebrow">{e.label}</p><h3>{e.title}</h3><p>{e.description}</p>{"link" in e&&<a className="inline-link" href={e.link}>{e.linkLabel} <span aria-hidden="true">→</span></a>}</article>)}</div>
+        <div className="experience-grid">{profile.experience.map(e=><article key={e.title}><p className="eyebrow">{e.label}</p><h3>{e.title}</h3><p>{e.description}</p>{"link" in e&&<Link className="inline-link" prefetch={false} href={e.link}>{e.linkLabel} <span aria-hidden="true">→</span></Link>}</article>)}</div>
       </section>
       <section id="skills" className="section" aria-label="Technical expertise">
         <SectionHeading index="04" label="ENGINEERING TOOLKIT" title={<>From interface<br/><em>to infrastructure.</em></>}/>
