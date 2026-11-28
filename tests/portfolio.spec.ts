@@ -385,18 +385,27 @@ test("site audio plays voice then loops music, persists across client navigation
  await expect(page.getByRole("button",{name:"Mute website audio"})).toBeVisible();
  await page.getByRole("button",{name:"Mute website audio"}).click();
  await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(true);
+ await page.locator(".navlinks").getByRole("link",{name:"CV",exact:true}).click();
+ await expect(page).toHaveURL(/\/resume$/);
+ await expect(audio).toHaveAttribute("data-persistence","yes");
+ expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(true);
  await page.reload();
  await expect(audio).toHaveAttribute("src","/audio/ambient.m4a");
- expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBe(true);
- await expect(page.getByRole("button",{name:"Enable website audio"})).toBeVisible();
+ expect(await audio.evaluate((a:HTMLAudioElement)=>a.muted)).toBe(false);
 });
 
 test("site audio attempts autoplay on arrival without a click",async({page})=>{
  await page.addInitScript(()=>{
+  localStorage.setItem("km-site-audio","off");
   const original=HTMLMediaElement.prototype.play;
-  Object.defineProperty(HTMLMediaElement.prototype,"play",{configurable:true,value:function(this:HTMLMediaElement){this.dataset.autoplayAttempt="yes";return original.call(this);}});
+  Object.defineProperty(HTMLMediaElement.prototype,"play",{configurable:true,value:function(this:HTMLMediaElement){this.dataset.autoplayAttempt="yes";this.dataset.autoplayMuted=String(this.muted);return original.call(this);}});
  });
  await page.goto("/resume");
- await expect(page.locator("#site-audio")).toHaveAttribute("data-autoplay-attempt","yes");
- await expect(page.locator("#site-audio")).toHaveAttribute("src","/audio/introduction.mp3");
+ const audio=page.locator("#site-audio");
+ await expect(audio).toHaveAttribute("data-autoplay-attempt","yes");
+ await expect(audio).toHaveAttribute("data-autoplay-muted","false");
+ await expect(audio).toHaveAttribute("src","/audio/introduction.mp3");
+ await page.reload();
+ await expect(audio).toHaveAttribute("data-autoplay-attempt","yes");
+ await expect(audio).toHaveAttribute("data-autoplay-muted","false");
 });

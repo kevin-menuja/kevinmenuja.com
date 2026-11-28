@@ -3,7 +3,6 @@ import {createContext,useContext,useEffect,useRef,useState,type ReactNode} from 
 type Track="intro"|"music";
 type AudioState={playing:boolean;track:Track;toggle:()=>void};
 const AudioContext=createContext<AudioState>({playing:false,track:"intro",toggle:()=>{}});
-const preference="km-site-audio";
 const completed="km-intro-completed-v2";
 const sources={intro:"/audio/introduction.mp3",music:"/audio/ambient.m4a"};
 function read(storage:"localStorage"|"sessionStorage",key:string){try{return window[storage].getItem(key);}catch{return null;}}
@@ -23,24 +22,20 @@ export function SiteAudio({children}:{children:ReactNode}){
  useEffect(()=>{
   const a=player.current;
   if(!a)return;
-  permitted.current=read("localStorage",preference)!=="off";
+  // Each full document visit begins enabled, regardless of old stored mute preferences.
+  permitted.current=true;
+  a.muted=false;
   if(read("sessionStorage",completed)==="yes"){
    activeTrack.current="music";a.loop=true;a.src=sources.music;a.load();
   }
   // Defer React state synchronization to the media events.
   if(permitted.current)void a.play().catch(()=>{});
-  const sync=(event:StorageEvent)=>{
-   if(event.key!==preference)return;
-   permitted.current=event.newValue!=="off";
-   if(!permitted.current)a.pause();
-  };
-  window.addEventListener("storage",sync);
-  return()=>{a.pause();window.removeEventListener("storage",sync);};
+  return()=>{a.pause();};
  },[]);
  function toggle(){
   const a=player.current;if(!a)return;
-  if(!a.paused){permitted.current=false;write("localStorage",preference,"off");a.pause();return;}
-  permitted.current=true;write("localStorage",preference,"on");play();
+  if(!a.paused){permitted.current=false;a.pause();return;}
+  permitted.current=true;a.muted=false;play();
  }
  return <AudioContext.Provider value={{playing,track,toggle}}>
   {children}
