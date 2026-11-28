@@ -51,7 +51,7 @@ export function ProjectCard({project:p}:{project:Project}){
 export function SiteFooter(){
   return <footer className="shell footer">
     <div><Link prefetch={false} href="/" className="footer-brand">Kevin Menuja<span>.</span></Link><p>{profile.title} · {profile.location}</p></div>
-    <div className="footer-links"><Link prefetch={false} href="/resume">CV &amp; recruitment <Arrow/></Link><a href={github}>GitHub <Arrow/></a><a href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><Link href="/privacy" prefetch={false}>Privacy &amp; analytics</Link><a href="#main">Back to top ↑</a></div>
+    <div className="footer-links"><Link prefetch={false} href="/resume">CV &amp; recruitment <Arrow/></Link><a href={github}>GitHub <Arrow/></a><a href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><a href="https://youtube.com/@kevinmenuja">YouTube <Arrow/></a><a href="https://www.facebook.com/share/18S9foYUWq/?mibextid=wwXIfr">Facebook <Arrow/></a><a href="https://www.instagram.com/kevsss_11">Instagram <Arrow/></a><a href="https://www.tiktok.com/@kevsss_410">TikTok <Arrow/></a><Link href="/privacy" prefetch={false}>Privacy &amp; analytics</Link><a href="#main">Back to top ↑</a></div>
     <span className="copyright">© 2026 Kevin Menuja</span>
   </footer>;
 }

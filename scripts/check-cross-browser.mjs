@@ -18,10 +18,12 @@ try{
    await page.evaluate(()=>document.fonts.ready);
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),"Homepage overflow");
    assert.equal(await page.locator(".project").count(),6);
-   await page.getByRole("button",{name:"Read transcript"}).click();
-   assert(await page.locator("#portrait-transcript").isVisible());
-   await page.locator(".workflow-panel").getByRole("button",{name:"Next step"}).click();
-   assert.equal(await page.getByRole("progressbar").getAttribute("aria-valuenow"),"1");
+   assert.equal(await page.locator(".hero-side,#lab,.motion-toggle").count(),0);
+   await page.getByRole("button",{name:"Switch to light mode"}).click();
+   assert.equal(await page.locator("html").getAttribute("data-theme"),"light");
+   await page.reload();
+   assert.equal(await page.locator("html").getAttribute("data-theme"),"light");
+   await page.getByRole("button",{name:"Switch to dark mode"}).click();
    for(const slug of slugs){
     assert.equal((await page.goto(url+"/projects/"+slug)).status(),200);
     await page.locator(".case-figure img").scrollIntoViewIfNeeded();
@@ -46,7 +48,7 @@ try{
    await page.locator(".contact-composer").getByRole("button",{name:"Copy draft"}).click();
    assert(await page.locator(".contact-composer input:invalid").count()>0);
    assert.deepEqual(errors,[]);
-   console.log(name+": PASS (homepage, six project pages, mobile layout, portrait, lab, architecture, gallery, insights, contact, privacy and CV)");
+   console.log(name+": PASS (homepage, six project pages, mobile layout, portrait, themes, architecture, gallery, insights, contact, privacy and CV)");
   }finally{await browser?.close();}
  }
 }finally{proc.kill("SIGTERM");}

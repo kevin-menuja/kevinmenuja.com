@@ -1,9 +1,7 @@
 import {LivingPortrait} from "./components/living-portrait";
-import {EngineeringLab} from "./components/engineering-lab";
 import {github,projects} from "./projects";
 import {SiteNav} from "./components/site-nav";
 import {Arrow,ProjectCard,SectionHeading,SiteFooter} from "./components/ui";
-import {LanyardExperience} from "./components/lanyard-experience";
 import {SkillMatrix} from "./components/skill-matrix";
 
 import {profile} from "./profile";
@@ -12,6 +10,8 @@ import {ProjectFilter} from "./components/project-filter";
 import {ContactComposer} from "./components/contact-composer";
 import {articles} from "./insights-data";
 import Link from "next/link";
+import {existsSync} from "node:fs";
+import {join} from "node:path";
 
 export const metadata={alternates:{canonical:"/"}};
 
@@ -25,7 +25,7 @@ export default function Home(){
         <h1 id="hero-title" className="hero-wordmark">KEVIN <span>MENUJA<span className="wordmark-dot">.</span></span></h1>
         <div className="hero-scene">
           <div className="hero-copy">
-            <p className="eyebrow hero-kicker">01 / HELLO, I’M KEVIN</p>
+
             <h2 className="hero-role professional-title">{profile.titleLines.map((line,i)=><span className="role-line" key={line}>{line}{i<profile.titleLines.length-1?" ":""}</span>)}</h2>
             <p className="lead">{profile.tagline}</p>
             <div className="actions">
@@ -35,23 +35,19 @@ export default function Home(){
             </div>
             <div className="hero-status"><span className="status-dot" aria-hidden="true"/> Open to international remote engineering opportunities</div>
           </div>
-          <LivingPortrait/>
-          <aside className="hero-side" aria-label="Developer identity">
-            <LanyardExperience/>
-            <div className="hero-side-caption"><span className="eyebrow">BUILD / LEARN / SHIP</span><p>Software with purpose.<br/>Engineering with ownership.</p></div>
-          </aside>
+          <LivingPortrait audioSrc={existsSync(join(process.cwd(),"public/audio/introduction.mp3"))?"/audio/introduction.mp3":undefined}/>
         </div>
-        <div className="hero-bottomline"><span className="eyebrow">DESIGN. DEVELOP. OPERATE.</span><a className="scroll-cue" href="#work">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a><span className="eyebrow hero-edition">LK / REMOTE</span></div>
+        <div className="hero-bottomline"><a className="scroll-cue" href="#work">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a></div>
       </section>
       <div className="strip" aria-label="Portfolio at a glance">
-        <div><b>06</b><span>Featured projects<small>Real application evidence</small></span></div>
-        <div><b>02</b><span>Completed diplomas<small>Computing and software</small></span></div>
-        <div><b>AI</b><span>Current learning focus<small>Applied AI engineering</small></span></div>
+        <div><b>06</b><span>Featured projects</span></div>
+        <div><b>02</b><span>Completed diplomas</span></div>
+        <div><b>AI</b><span>Current learning focus</span></div>
       </div>
       <section id="work" className="section" aria-label="Selected work">
-        <SectionHeading index="01" label="SELECTED WORK" title={<>Built to solve.<br/><em>Engineered to work.</em></>} description="Business applications, backend systems and academic collaborations. Explore the implementation, documented evidence and scope of each project."/>
+        <SectionHeading index="01" label="SELECTED WORK" title={<>Built to solve.<br/><em>Engineered to work.</em></>}/>
         <ProjectFilter items={projects.map(p=>({slug:p.slug,category:caseStudies[p.slug].category,searchText:[p.name,p.kind,p.summary,...p.stack].join(" "),card:<ProjectCard project={p}/>}))}/>
-        <div className="section-end"><a className="button secondary" href={github+"?tab=repositories"}>All repositories <Arrow/></a><span className="eyebrow">SOURCE CODE / DOCUMENTATION / REAL INTERFACES</span></div>
+        <div className="section-end"><a className="button secondary" href={github+"?tab=repositories"}>All repositories <Arrow/></a></div>
       </section>
       <section id="about" className="section about" aria-label="Professional background">
         <div className="about-copy">
@@ -62,7 +58,7 @@ export default function Home(){
         </div>
         <div className="education">
           <p className="eyebrow">EDUCATION / COMPLETED</p>
-          {profile.education.map((e,i)=><article key={e.title}><span className="timeline-index">0{i+1}</span><div><span className="education-status">{e.status}</span><h3>{e.title}</h3><p>{e.detail}</p><p className="education-note">{e.note}</p></div></article>)}
+          {profile.education.map((e,i)=><article key={e.title}><span className="timeline-index">0{i+1}</span><div><span className="education-status">{e.status}</span><h3>{e.title}</h3><p>{e.detail}</p></div></article>)}
         </div>
       </section>
       <section id="experience" className="section professional-experience" aria-labelledby="experience-title">
@@ -71,21 +67,17 @@ export default function Home(){
         <div className="experience-grid">{profile.experience.map(e=><article key={e.title}><p className="eyebrow">{e.label}</p><h3>{e.title}</h3><p>{e.description}</p>{"link" in e&&<a className="inline-link" href={e.link}>{e.linkLabel} <span aria-hidden="true">→</span></a>}</article>)}</div>
       </section>
       <section id="skills" className="section" aria-label="Technical expertise">
-        <SectionHeading index="04" label="ENGINEERING TOOLKIT" title={<>From interface<br/><em>to infrastructure.</em></>} description="Full-stack capabilities backed by project work, AI-assisted development experience and my current applied AI specialization."/>
+        <SectionHeading index="04" label="ENGINEERING TOOLKIT" title={<>From interface<br/><em>to infrastructure.</em></>}/>
         <SkillMatrix/>
         <div className="principles-grid">{profile.principles.map(p=><article key={p.title}><h3>{p.title}</h3><p>{p.description}</p></article>)}</div>
       </section>
-      <section id="lab" className="section" aria-label="Interactive engineering lab">
-        <SectionHeading index="05" label="ENGINEERING PLAYGROUND" title={<>Engineering<br/><em>in motion.</em></>} description="Explore a transparent workflow simulation and a command-driven introduction to my work."/>
-        <EngineeringLab/>
-      </section>
       <section id="insights" className="section" aria-label="Technical insights">
-        <SectionHeading index="06" label="TECHNICAL INSIGHTS" title={<>Engineering<br/><em>in practice.</em></>} description="Explore technical notes based on my projects, implementation decisions and applied AI learning."/>
+        <SectionHeading index="05" label="TECHNICAL INSIGHTS" title={<>Engineering<br/><em>in practice.</em></>}/>
         <div className="insight-grid">{articles.map(a=><article className="case-block" key={a.slug}><p className="eyebrow">{a.category}</p><h3><Link href={"/insights/"+a.slug} prefetch={false}>{a.title}</Link></h3><p>{a.description}</p><Link className="inline-link" href={"/insights/"+a.slug} prefetch={false}>Read article <Arrow/></Link></article>)}</div>
         <div className="section-end"><Link className="button secondary" href="/insights" prefetch={false}>All technical insights <Arrow/></Link></div>
       </section>
       <section id="contact" className="contact" aria-label="Contact">
-        <p className="eyebrow"><span className="section-number">07</span> CONTACT</p>
+        <p className="eyebrow"><span className="section-number">06</span> CONTACT</p>
         <div className="contact-layout">
           <div><h2>Let’s build<br/><em>something useful.</em></h2><p>{profile.opportunities}</p></div>
           <div className="contact-links"><a className="button primary" href="mailto:kevinmenuja11@gmail.com">Email me <Arrow/></a><a className="button secondary" href="https://www.linkedin.com/in/kevin-menuja-st20345403">LinkedIn <Arrow/></a><a className="button secondary" href={github}>GitHub <Arrow/></a></div>

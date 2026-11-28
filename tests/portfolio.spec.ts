@@ -63,17 +63,6 @@ test("accessibility baseline: home and representative case study",async({page})=
   }
 });
 
-test("developer pass exposes real profile details and returns to portrait",async({page})=>{
-  await page.setViewportSize({width:1440,height:900});
-  await page.goto("/");
-  const toggle=page.getByRole("button",{name:"View profile details"});
-  await toggle.click();
-  await expect(page.getByRole("button",{name:"Back to portrait"})).toHaveAttribute("aria-expanded","true");
-  await expect(page.locator(".pass-details")).toContainText("Higher Diploma");
-  await page.getByRole("button",{name:"Back to portrait"}).press("Enter");
-  await expect(toggle).toHaveAttribute("aria-expanded","false");
-});
-
 test("technology matrix filters the learning focus distinctly",async({page})=>{
   await page.setViewportSize({width:390,height:844});
   await page.goto("/");
@@ -86,122 +75,21 @@ test("technology matrix filters the learning focus distinctly",async({page})=>{
   await expect(page.locator(".matrix-group")).toHaveCount(4);
 });
 
-test("motion preference can be switched off and survives navigation",async({page})=>{
-  await page.emulateMedia({reducedMotion:"no-preference"});
-  await page.goto("/");
-  const motion=page.locator(".motion-toggle");
-  await expect(motion).toHaveAttribute("aria-pressed","true");
-  await expect(page.locator("html")).toHaveClass(/motion-active/);
-  await motion.click();
-  await expect(motion).toHaveAttribute("aria-pressed","false");
-  await expect(page.locator("html")).toHaveClass(/motion-disabled/);
-  await page.reload();
-  await expect(motion).toHaveAttribute("aria-pressed","false");
-  await motion.click();
-  await expect(page.locator("html")).toHaveClass(/motion-active/);
-  await page.getByRole("link",{name:"Explore my work"}).click();
-  await expect(page).toHaveURL(/#work$/);
-});
-
 test("system reduced-motion setting disables animated scrolling",async({page})=>{
   await page.emulateMedia({reducedMotion:"reduce"});
   await page.goto("/");
-  await expect(page.locator(".motion-toggle")).toBeDisabled();
+  await expect(page.locator(".motion-toggle")).toHaveCount(0);
   await expect(page.locator("html")).toHaveClass(/motion-disabled/);
   await expect(page.locator(".hero-wordmark")).toBeVisible();
 });
 
-test("3D pass supports drag, flip, reset and return to standard view",async({page})=>{
-  await page.setViewportSize({width:1440,height:900});
-  await page.emulateMedia({reducedMotion:"no-preference"});
-  const errors:string[]=[];page.on("pageerror",e=>errors.push(e.message));
-  await page.goto("/");
-  await page.getByRole("button",{name:"Explore 3D pass"}).click();
-  const viewport=page.locator(".lanyard-viewport[data-state='3d']");
-  await expect(viewport).toBeVisible({timeout:20000});
-  const canvas=viewport.locator("canvas");
-  await expect(canvas).toBeVisible();
-  const b=await canvas.boundingBox();
-  if(!b)throw new Error("3D canvas missing");
-  await page.mouse.move(b.x+b.width/2,b.y+b.height*.5);
-  await page.mouse.down();await page.mouse.move(b.x+b.width*.78,b.y+b.height*.58,{steps:8});await page.mouse.up();
-  await page.getByRole("button",{name:"Flip pass"}).click();
-  await expect(page.getByRole("button",{name:"Flip pass"})).toHaveAttribute("aria-pressed","true");
-  await page.getByRole("button",{name:"Reset",exact:true}).click();
-  await expect(page.getByRole("button",{name:"Flip pass"})).toHaveAttribute("aria-pressed","false");
-  await page.waitForTimeout(600);
-  await viewport.screenshot({path:"test-results/lanyard-3d.png"});
-  await page.getByRole("button",{name:"Standard view"}).click();
-  await expect(page.getByRole("button",{name:"View profile details"})).toBeVisible();
-  await expect(canvas).toHaveCount(0);
-  expect(errors).toEqual([]);
-});
-
-test("3D pass falls back when WebGL is unavailable",async({page})=>{
-  await page.setViewportSize({width:1440,height:900});
-  await page.addInitScript(()=>{
-    const original=HTMLCanvasElement.prototype.getContext;
-    // Browser capability simulation: only block WebGL, preserve 2D canvas.
-    Object.defineProperty(HTMLCanvasElement.prototype,"getContext",{value:function(this:HTMLCanvasElement,type:string,...args:unknown[]){
-      if(type.startsWith("webgl"))return null;
-      return Reflect.apply(original,this,[type,...args]);
-    }});
-  });
-  await page.goto("/");
-  await page.getByRole("button",{name:"Explore 3D pass"}).click();
-  await expect(page.getByRole("status").filter({hasText:"3D rendering unavailable"})).toBeVisible({timeout:20000});
-  await expect(page.getByRole("button",{name:"View profile details"})).toBeVisible();
-});
-
-test("living portrait responds to pointer and transcript remains available",async({page})=>{
+test("living portrait responds to pointer",async({page})=>{
   await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:"no-preference"});
   await page.goto("/");
   await expect(page.locator("html")).toHaveClass(/motion-active/);
   const portrait=page.locator(".living-portrait");
   await portrait.hover({position:{x:60,y:65}});
   await expect.poll(()=>portrait.evaluate(el=>el.style.getPropertyValue("--portrait-x"))).not.toBe("");
-  await page.getByRole("button",{name:"Read transcript"}).click();
-  await expect(page.locator("#portrait-transcript")).toContainText("Kevin Menuja");
-  await page.getByRole("button",{name:"Hide transcript"}).click();
-  await expect(page.locator("#portrait-transcript")).toBeHidden();
-});
-
-test("spoken introduction is opt-in and gracefully supports an unavailable voice",async({page})=>{
-  await page.addInitScript(()=>{
-    Object.defineProperty(window,"speechSynthesis",{configurable:true,value:{speak:(u:SpeechSynthesisUtterance)=>{setTimeout(()=>u.onerror?.call(u,new Event("error") as SpeechSynthesisErrorEvent),10);},cancel:()=>{}}});
-  });
-  await page.goto("/");
-  await expect(page.locator("#portrait-transcript")).toBeHidden();
-  await page.getByRole("button",{name:"Listen to introduction"}).click();
-  await expect(page.locator("#portrait-transcript")).toBeVisible();
-  await expect(page.locator(".living-caption")).toContainText("Audio unavailable");
-});
-
-test("engineering workflow supports steps, reset and complete simulation",async({page})=>{
-  await page.goto("/#lab");
-  const lab=page.locator(".workflow-panel");
-  await expect(lab).toContainText("No AI agents");
-  await lab.getByRole("button",{name:"Next step"}).click();
-  await expect(lab.getByRole("progressbar")).toHaveAttribute("aria-valuenow","1");
-  await lab.getByRole("combobox").selectOption("1");
-  await expect(lab.getByRole("progressbar")).toHaveAttribute("aria-valuenow","0");
-  await lab.getByRole("button",{name:"Run workflow"}).click();
-  await expect(lab.getByRole("progressbar")).toHaveAttribute("aria-valuenow","4",{timeout:10000});
-  await expect(lab.getByRole("status")).toContainText("No actual changes");
-  await lab.getByRole("button",{name:"Reset"}).click();
-  await expect(lab.getByRole("progressbar")).toHaveAttribute("aria-valuenow","0");
-});
-
-test("portfolio terminal accepts allowlisted commands only",async({page})=>{
-  await page.goto("/#lab");
-  const terminal=page.locator(".terminal-panel");
-  await terminal.getByRole("button",{name:"projects",exact:true}).click();
-  await expect(terminal.getByRole("log")).toContainText("Rice & Kottu Hut POS");
-  await terminal.getByRole("textbox",{name:"Portfolio command"}).fill("rm -rf /");
-  await terminal.getByRole("button",{name:"Run",exact:false}).click();
-  await expect(terminal.getByRole("log")).toContainText("Unknown command");
-  await terminal.getByRole("button",{name:"clear",exact:true}).click();
-  await expect(terminal.getByRole("log")).not.toContainText("Unknown command");
 });
 
 test("gallery cycles authentic evidence and restores focus on close",async({page})=>{
@@ -249,10 +137,8 @@ test("all gallery assets are real local images that load",async({page})=>{
 
 test("expanded accessibility scan on interactive states",async({page})=>{
   await page.setViewportSize({width:390,height:844});
-  await page.goto("/#lab");
-  await page.getByRole("button",{name:"Next step"}).click();
-  await page.getByRole("button",{name:"help",exact:true}).click();
-  await page.getByRole("button",{name:"Read transcript"}).click();
+  await page.goto("/#work");
+  await page.getByRole("button",{name:"Business applications"}).click();
   const home=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
   expect(home.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
   await page.goto("/projects/serviceops-group-project");
@@ -267,14 +153,10 @@ test("professional identity is consistent and supported by public content",async
   await page.goto("/");
   await expect(page).toHaveTitle(new RegExp(title));
   await expect(page.locator(".hero-role")).toHaveText(title);
-  await expect(page.locator(".pass-role")).toHaveText(title);
+  await expect(page.locator(".brand-role")).toHaveText(title);
   await expect(page.locator("#experience .experience-grid article")).toHaveCount(3);
   await expect(page.locator("#about .education article")).toHaveCount(3);
   await expect(page.locator("#experience")).toContainText("not part of the completed group application");
-  await page.getByRole("button",{name:"Read transcript"}).click();
-  await expect(page.locator("#portrait-transcript")).toContainText(title);
-  await page.locator(".terminal-panel").getByRole("button",{name:"about",exact:true}).click();
-  await expect(page.locator(".terminal-panel").getByRole("log")).toContainText(title);
 });
 
 test("project discovery supports category, technology and empty-state reset",async({page})=>{
@@ -427,4 +309,43 @@ test("recruitment page fits supported widths and passes accessibility scan",asyn
  expect(result.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))).toEqual([]);
  await page.getByRole("button",{name:"Open navigation menu"}).click();
  await expect(page.getByRole("navigation",{name:"Mobile navigation"}).getByRole("link",{name:"CV",exact:true})).toBeVisible();
+});
+
+test("pre-launch feature removals and social links",async({page})=>{
+ await page.goto("/");
+ await expect(page.locator("#lab,.hero-side,.developer-pass,.motion-toggle")).toHaveCount(0);
+ await expect(page.locator(".brand-role")).toHaveText("AI Powered Full-Stack Software Engineer");
+ await expect(page.getByRole("button",{name:"Listen to introduction"})).toHaveCount(0);
+ for(const [label,url] of [["YouTube","https://youtube.com/@kevinmenuja"],["Facebook","https://www.facebook.com/share/18S9foYUWq/?mibextid=wwXIfr"],["Instagram","https://www.instagram.com/kevsss_11"],["TikTok","https://www.tiktok.com/@kevsss_410"]]){
+  await expect(page.locator("footer").getByRole("link",{name:label})).toHaveAttribute("href",url);
+ }
+});
+
+test("theme defaults dark, persists light and returns to dark",async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto("/");
+ await expect(page.locator("html")).toHaveAttribute("data-theme","dark");
+ await page.getByRole("button",{name:"Switch to light mode"}).click();
+ await expect(page.locator("html")).toHaveAttribute("data-theme","light");
+ await page.reload();
+ await expect(page.locator("html")).toHaveAttribute("data-theme","light");
+ for(const route of ["/","/projects/serviceops-group-project","/resume","/privacy","/insights"]){
+  await page.goto(route);
+  await expect(page.locator("html")).toHaveAttribute("data-theme","light");
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),route).toBe(true);
+  const axe=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa"]).analyze();
+  expect(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),route).toEqual([]);
+ }
+ await page.getByRole("button",{name:"Switch to dark mode"}).click();
+ await expect(page.locator("html")).toHaveAttribute("data-theme","dark");
+});
+
+test("motion is enabled on mobile and desktop, respecting system preference",async({page})=>{
+ await page.emulateMedia({reducedMotion:"no-preference"});
+ for(const width of [390,1440]){
+  await page.setViewportSize({width,height:900});
+  await page.goto("/");
+  await expect(page.locator("html")).toHaveClass(/motion-active/);
+  await expect(page.locator(".motion-toggle")).toHaveCount(0);
+ }
 });

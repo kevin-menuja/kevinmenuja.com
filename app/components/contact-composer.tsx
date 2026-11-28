@@ -8,7 +8,7 @@ export function ContactComposer(){
  function valid(form:HTMLFormElement){if(!form.reportValidity())return false;if(!name.trim()||message.trim().length<10){setNotice("Enter your name and a message containing at least 10 non-whitespace characters.");return false;}return true;}
  const mail=()=>"mailto:"+address+"?subject="+encodeURIComponent(topic)+"&body="+encodeURIComponent(body());
  return <form className="contact-composer" onSubmit={e=>{e.preventDefault();if(!valid(e.currentTarget))return;setNotice("Your email draft is ready. Send it from your email application; this website has not sent a message.");window.location.href=mail();}}>
- <h3>Prepare an inquiry</h3><p>Compose a message here and send it using your email application. No form submissions are stored by this site.</p>
+ <h3>Prepare an inquiry</h3><p>Send via your email application.</p>
  <div className="contact-fields"><label>Your name<input required autoComplete="name" maxLength={100} value={name} onChange={e=>{setName(e.target.value);setNotice("");}}/></label><label>Email address<input type="email" required autoComplete="email" maxLength={254} value={email} onChange={e=>{setEmail(e.target.value);setNotice("");}}/></label></div>
  <label>Inquiry type<select value={topic} onChange={e=>{setTopic(e.target.value);setNotice("");}}>{topics.map(t=><option key={t}>{t}</option>)}</select></label>
  <label>Message<textarea required minLength={10} maxLength={1200} rows={5} value={message} onChange={e=>{setMessage(e.target.value);setNotice("");}}/></label>

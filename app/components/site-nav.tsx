@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {profile} from "../profile";
+import {ThemeToggle} from "./theme-toggle";
 import {useEffect, useRef, useState} from "react";
 
 const links = [
@@ -9,7 +10,6 @@ const links = [
   {label:"About", href:"/#about"},
   {label:"Experience", href:"/#experience"},
   {label:"Expertise", href:"/#skills"},
-  {label:"Lab", href:"/#lab"},
   {label:"Insights", href:"/insights"},
   {label:"CV", href:"/resume"}
 ];
@@ -27,7 +27,7 @@ export function SiteNav(){
     const pointer=(event:PointerEvent)=>{
       if(!header.current?.contains(event.target as Node))setOpen(false);
     };
-    const media=window.matchMedia("(min-width: 1201px)");
+    const media=window.matchMedia("(min-width: 1281px)");
     const resize=()=>{if(media.matches)setOpen(false);};
     document.addEventListener("keydown",key);
     document.addEventListener("pointerdown",pointer);
@@ -43,12 +43,13 @@ export function SiteNav(){
     <nav className="shell nav" aria-label="Main navigation">
       <Link prefetch={false} href="/" className="brand" onClick={()=>setOpen(false)}>
         <span className="mark" aria-hidden="true">KM<span>.</span></span>
-        <span className="brand-name">Kevin Menuja<span className="brand-role" title={profile.title}>AI POWERED ENGINEER</span></span>
+        <span className="brand-name">Kevin Menuja<span className="brand-role" title={profile.title}>{profile.title}</span></span>
       </Link>
       <div className="navlinks">
         {links.map(l=><Link prefetch={false} key={l.href} href={l.href}>{l.label}</Link>)}
       </div>
       <Link prefetch={false} className="contact-nav" href="/#contact">Let’s connect <span aria-hidden="true">↗</span></Link>
+      <ThemeToggle/>
       <button className="nav-toggle" ref={toggle} type="button" aria-expanded={open} aria-controls="mobile-nav" aria-label={open?"Close navigation":"Open navigation menu"} onClick={()=>setOpen(v=>!v)}>
         <span aria-hidden="true">{open?"×":"☰"}</span><span>{open?"Close":"Menu"}</span>
       </button>
